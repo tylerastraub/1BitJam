@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.17.0)
-project(StraubEngine VERSION 0.1.0)
+project(1BitJam VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})
 
-set(StraubEngine_VERSION "0.1a")
+set(1BitJam_VERSION "0.1a")
 
 if(WIN32)
     set(SDL2_INCLUDE_DIR "C:/Program Files/mingw64/include/SDL2")
@@ -113,40 +113,40 @@ endif()
 
 if(WIN32)
     include_directories(${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SOURCE_INCLUDES})
-    add_executable(StraubEngine ${SOURCES} ${TMX_SOURCES})
+    add_executable(1BitJam ${SOURCES} ${TMX_SOURCES})
     # remove -mconsole for release builds
-    target_link_libraries(StraubEngine -lmingw32 ${SDL2_LIBRARY_DIR}/libSDL2main.a ${SDL2_LIBRARY_DIR}/libSDL2.dll.a ${SDL2_IMAGE_LIBRARY_DIR}/libSDL2_image.dll.a ${SDL2_TTF_LIBRARY_DIR}/libSDL2_ttf.dll.a -mwindows -mconsole)
-    add_custom_command(TARGET StraubEngine POST_BUILD
+    target_link_libraries(1BitJam -lmingw32 ${SDL2_LIBRARY_DIR}/libSDL2main.a ${SDL2_LIBRARY_DIR}/libSDL2.dll.a ${SDL2_IMAGE_LIBRARY_DIR}/libSDL2_image.dll.a ${SDL2_TTF_LIBRARY_DIR}/libSDL2_ttf.dll.a -mwindows -mconsole)
+    add_custom_command(TARGET 1BitJam POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${PROJECT_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:StraubEngine>/res/)
-    add_custom_command(TARGET StraubEngine POST_BUILD
+        ${PROJECT_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:1BitJam>/res/)
+    add_custom_command(TARGET 1BitJam POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${PROJECT_SOURCE_DIR}/settings.cfg $<TARGET_FILE_DIR:StraubEngine>/settings.cfg)
+        ${PROJECT_SOURCE_DIR}/settings.cfg $<TARGET_FILE_DIR:1BitJam>/settings.cfg)
 elseif(APPLE)
     include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIR} ${SOURCE_INCLUDES})
-    add_executable(StraubEngine MACOSX_BUNDLE ${SOURCES})
-    target_link_libraries(StraubEngine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${TMXLITE_LIBRARY_DIR}/libtmxlite.a)
-    set_target_properties(StraubEngine PROPERTIES
+    add_executable(1BitJam MACOSX_BUNDLE ${SOURCES})
+    target_link_libraries(1BitJam ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${TMXLITE_LIBRARY_DIR}/libtmxlite.a)
+    set_target_properties(1BitJam PROPERTIES
         BUNDLE True
-        MACOSX_BUNDLE_EXECUTABLE_NAME StraubEngine
+        MACOSX_BUNDLE_EXECUTABLE_NAME 1BitJam
         MACOSX_BUNDLE_ICON_FILE icon.png
-        MACOSX_BUNDLE_GUI_IDENTIFIER com.straub.StraubEngine
-        MACOSX_BUNDLE_LONG_VERSION_STRING ${StraubEngine_VERSION}
-        MACOSX_BUNDLE_BUNDLE_NAME StraubEngine
-        MACOSX_BUNDLE_SHORT_VERSION_STRING ${StraubEngine_VERSION}
-        MACOSX_BUNDLE_BUNDLE_VERSION ${StraubEngine_VERSION}
+        MACOSX_BUNDLE_GUI_IDENTIFIER com.straub.1BitJam
+        MACOSX_BUNDLE_LONG_VERSION_STRING ${1BitJam_VERSION}
+        MACOSX_BUNDLE_BUNDLE_NAME 1BitJam
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${1BitJam_VERSION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${1BitJam_VERSION}
         MACOSX_BUNDLE_COPYRIGHT "© Tyler Straub 2022"
         MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake/Info.plist.in)
     install(CODE "
         include(BundleUtilities)
-        fixup_bundle(\"${CMAKE_BINARY_DIR}/StraubEngine.app\"   \"\"   \"${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY}\")
+        fixup_bundle(\"${CMAKE_BINARY_DIR}/1BitJam.app\"   \"\"   \"${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY}\")
         " COMPONENT Runtime)
-    add_custom_command(TARGET StraubEngine POST_BUILD
+    add_custom_command(TARGET 1BitJam POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${PROJECT_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:StraubEngine>/../Resources/res/)
-    add_custom_command(TARGET StraubEngine POST_BUILD
+        ${PROJECT_SOURCE_DIR}/res/ $<TARGET_FILE_DIR:1BitJam>/../Resources/res/)
+    add_custom_command(TARGET 1BitJam POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${PROJECT_SOURCE_DIR}/settings.cfg $<TARGET_FILE_DIR:StraubEngine>/../Resources/settings.cfg)
+        ${PROJECT_SOURCE_DIR}/settings.cfg $<TARGET_FILE_DIR:1BitJam>/../Resources/settings.cfg)
 endif()
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

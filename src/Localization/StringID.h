@@ -4,5 +4,5 @@ using std::string;
 
 namespace StringID
 {
-    const string windowTitle = "StraubEngine";
+    const string windowTitle = "1BitJam";
 };
