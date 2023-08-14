@@ -38,11 +38,7 @@ namespace prefab {
         auto ecs = EntityRegistry::getInstance();
         Entity ent = ecs->createEntity();
 
-        CollisionComponent collision;
-        collision.collisionRect = triggerRect;
-        collision.collisionRectOffset = {0, 0};
-        
-        ecs->addComponent<CollisionComponent>(ent, collision);
+        ecs->addComponent<CollisionComponent>(ent, CollisionComponent{});
 
         ecs->addComponent<TransformComponent>(ent, TransformComponent{
             {(float) triggerRect.x, (float) triggerRect.y},

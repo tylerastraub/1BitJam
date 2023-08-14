@@ -10,6 +10,7 @@
 #include "TransformComponent.h"
 #include "StateComponent.h"
 #include "PhysicsComponent.h"
+#include "CollisionComponent.h"
 
 namespace {
     class PlayerScript : public IScript {
@@ -42,6 +43,7 @@ namespace prefab {
         ecs->addComponent<ScriptComponent>(ent, ScriptComponent{std::make_shared<PlayerScript>()});
         ecs->addComponent<StateComponent>(ent, StateComponent{EntityState::IDLE});
         ecs->addComponent<PhysicsComponent>(ent, PhysicsComponent{{0.f, 0.f}, {1.f, 1.f}});
+        ecs->addComponent<CollisionComponent>(ent, CollisionComponent{});
 
         RenderComponent render;
         render.renderQuad = {0, 0, 16, 16};

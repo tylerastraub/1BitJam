@@ -10,6 +10,7 @@
 #include "SpritesheetPropertiesComponent.h"
 #include "DirectionComponent.h"
 #include "PhysicsComponent.h"
+#include "CollisionComponent.h"
 // Prefabs
 #include "Player.h"
 
@@ -89,6 +90,8 @@ void GameState::tick(float timescale) {
 
     _inputSystem->update();
 
+    _collisionSystem->update(timescale, &_level);
+    
     _physicsSystem->update(timescale);
 
     _renderSystem->update(timescale);
@@ -164,6 +167,13 @@ void GameState::initSystems() {
     sig.set(ecs->getComponentType<PhysicsComponent>(), true);
     sig.set(ecs->getComponentType<TransformComponent>(), true);
     ecs->setSystemSignature<PhysicsSystem>(sig);
+    
+    sig.reset();
+    _collisionSystem = ecs->registerSystem<CollisionSystem>();
+    sig.set(ecs->getComponentType<CollisionComponent>(), true);
+    sig.set(ecs->getComponentType<PhysicsComponent>(), true);
+    sig.set(ecs->getComponentType<TransformComponent>(), true);
+    ecs->setSystemSignature<CollisionSystem>(sig);
 }
 
 void GameState::initPrefabs() {
