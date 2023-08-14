@@ -18,7 +18,8 @@
 std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().time_since_epoch().count()};
 
 bool GameState::init() {
-    EntityRegistry::getInstance()->init();
+    auto ecs = EntityRegistry::getInstance();
+    ecs->init();
 
     // Input
     _keyboard = std::make_unique<Keyboard>();
@@ -68,10 +69,22 @@ bool GameState::init() {
     initSystems();
     initPrefabs();
 
+    // Camera
+    auto& pTransform = ecs->getComponent<TransformComponent>(_player);
+    auto& pRender = ecs->getComponent<RenderComponent>(_player);
+    _cameraSystem->setCurrentCameraOffset(pTransform.position.x * _level.getTileSize() + pRender.renderQuadOffset.x + pRender.renderQuad.w / 2 - getGameSize().x / 2,
+        pTransform.position.y * _level.getTileSize() + pRender.renderQuadOffset.y + pRender.renderQuad.h / 2 - getGameSize().y / 2);
+    _cameraSystem->setGoalCameraOffset(pTransform.position.x * _level.getTileSize() + pRender.renderQuadOffset.x + pRender.renderQuad.w / 2 - getGameSize().x / 2,
+        pTransform.position.y * _level.getTileSize() + pRender.renderQuadOffset.y + pRender.renderQuad.h / 2 - getGameSize().y / 2);
+    _cameraSystem->update(1.f);
+    _renderOffset = {_cameraSystem->getCurrentCameraOffset().x, _cameraSystem->getCurrentCameraOffset().x};
+
     return true;
 }
 
 void GameState::tick(float timescale) {
+    auto ecs = EntityRegistry::getInstance();
+
     _scriptSystem->update(timescale);
 
     _inputSystem->update();
@@ -79,6 +92,20 @@ void GameState::tick(float timescale) {
     _physicsSystem->update(timescale);
 
     _renderSystem->update(timescale);
+
+    // Camera
+    auto& pTransform = ecs->getComponent<TransformComponent>(_player);
+    auto& pRender = ecs->getComponent<RenderComponent>(_player);
+    _cameraSystem->setGoalCameraOffset(pTransform.position.x * _level.getTileSize() + pRender.renderQuadOffset.x + pRender.renderQuad.w / 2 - getGameSize().x / 2,
+        pTransform.position.y * _level.getTileSize() + pRender.renderQuadOffset.y + pRender.renderQuad.h / 2 - getGameSize().y / 2);
+    _cameraSystem->update(timescale);
+
+    float playerXRemainder = pTransform.position.x * _level.getTileSize() - (int) pTransform.position.x * _level.getTileSize();
+    float playerYRemainder = pTransform.position.y * _level.getTileSize() - (int) pTransform.position.y * _level.getTileSize();
+    if(_cameraSystem->atXEdge()) playerXRemainder = 0.f;
+    if(_cameraSystem->atYEdge()) playerYRemainder = 0.f;
+    _renderOffset.x = (int) (_cameraSystem->getCurrentCameraOffset().x + playerXRemainder);
+    _renderOffset.y = (int) (_cameraSystem->getCurrentCameraOffset().y + playerYRemainder);
 }
 
 void GameState::render() {

@@ -35,7 +35,7 @@ private:
      * - 0.5f = very fast
      * - 1.f = no smooth camera, instantly locks onto target
      */
-    float _cameraSpeed = 0.075f;
+    float _cameraSpeed = 1.f;
 
     strb::vec2 _gameSize = {0, 0}; // The size of the game window in pixels
     strb::vec2 _levelSize = {0, 0}; // The level size in pixels
