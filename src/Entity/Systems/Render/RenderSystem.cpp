@@ -23,8 +23,8 @@ void RenderSystem::render(SDL_Renderer* renderer, int renderXOffset, int renderY
     for(auto ent : _entities) {
         auto& renderComponent = ecs->getComponent<RenderComponent>(ent);
         auto& transform = ecs->getComponent<TransformComponent>(ent);
-        renderComponent.renderQuad.x = transform.position.x + renderComponent.renderQuadOffset.x;
-        renderComponent.renderQuad.y = transform.position.y + renderComponent.renderQuadOffset.y;
+        renderComponent.renderQuad.x = transform.position.x * RENDER_TILE_SIZE + renderComponent.renderQuadOffset.x;
+        renderComponent.renderQuad.y = transform.position.y * RENDER_TILE_SIZE + renderComponent.renderQuadOffset.y;
         SDL_Rect quad = renderComponent.renderQuad;
         quad.x += renderXOffset;
         quad.y += renderYOffset;

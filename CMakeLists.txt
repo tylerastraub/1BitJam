@@ -69,11 +69,13 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/src/Engine/RandomUtilities/RDSTable.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Components/Render/SpritesheetPropertiesComponent.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Core/EntityManager.cpp
+    ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Player.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/DialogueTrigger.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/PrefabSpawnTrigger.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/ScriptSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Input/InputSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Physics/PhysicsSystem.cpp
+    ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Render/CameraSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Render/RenderSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/GUI/BlankElement.cpp
     ${PROJECT_SOURCE_DIR}/src/GUI/Button.cpp

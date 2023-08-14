@@ -1,6 +1,7 @@
 #include "InputSystem.h"
 #include "EntityRegistry.h"
 #include "InputComponent.h"
+#include "PhysicsComponent.h"
 
 #include <algorithm>
 
@@ -14,30 +15,31 @@ void InputSystem::update() {
     auto ecs = EntityRegistry::getInstance();
     for(auto ent : _entities) {
         auto& inputComponent = ecs->getComponent<InputComponent>(ent);
+        auto& physics = ecs->getComponent<PhysicsComponent>(ent);
         auto allowedInputs = inputComponent.allowedInputs;
 
         // X inputs
         if(inputPressed(InputEvent::LEFT) &&
            std::find(allowedInputs.begin(), allowedInputs.end(), InputEvent::LEFT) != allowedInputs.end()) {
             _inputRequested = true;
-            std::cout << "left pressed" << std::endl;
+            physics.velocity.x = physics.moveSpeed.x * -1;
         }
         else if(inputPressed(InputEvent::RIGHT) &&
            std::find(allowedInputs.begin(), allowedInputs.end(), InputEvent::RIGHT) != allowedInputs.end()) {
             _inputRequested = true;
-            std::cout << "right pressed" << std::endl;
+            physics.velocity.x = physics.moveSpeed.x;
         }
 
         // Y inputs
         if(inputPressed(InputEvent::UP) &&
            std::find(allowedInputs.begin(), allowedInputs.end(), InputEvent::UP) != allowedInputs.end()) {
             _inputRequested = true;
-            std::cout << "up pressed" << std::endl;
+            physics.velocity.y = physics.moveSpeed.y * -1;
         }
         else if(inputPressed(InputEvent::DOWN) &&
            std::find(allowedInputs.begin(), allowedInputs.end(), InputEvent::DOWN) != allowedInputs.end()) {
             _inputRequested = true;
-            std::cout << "down pressed" << std::endl;
+            physics.velocity.y = physics.moveSpeed.y;
         }
     }
 

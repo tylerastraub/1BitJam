@@ -5,6 +5,13 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Controller.h"
+#include "Level.h"
+// Systems
+#include "InputSystem.h"
+#include "RenderSystem.h"
+#include "ScriptSystem.h"
+#include "CameraSystem.h"
+#include "PhysicsSystem.h"
 
 #include <memory>
 
@@ -22,9 +29,22 @@ public:
     void handleMouseInput(SDL_Event e) override;
 
 private:
+    void initSystems();
+    void initPrefabs();
+
     std::unique_ptr<Keyboard> _keyboard = nullptr;
     std::unique_ptr<Mouse> _mouse = nullptr;
     std::unique_ptr<Controller> _controller = nullptr;
+
+    Level _level;
+
+    Entity _player;
+
+    std::shared_ptr<InputSystem> _inputSystem = nullptr;
+    std::shared_ptr<RenderSystem> _renderSystem = nullptr;
+    std::shared_ptr<ScriptSystem> _scriptSystem = nullptr;
+    std::shared_ptr<CameraSystem> _cameraSystem = nullptr;
+    std::shared_ptr<PhysicsSystem> _physicsSystem = nullptr;
 
     SDL_FPoint _renderOffset = {0.f, 0.f};
 };

@@ -6,45 +6,18 @@
 #include <iostream>
 #include <algorithm>
 
-bool PhysicsSystem::updateX(float timescale) {
-    bool entityMoved = false;
+void PhysicsSystem::update(float timescale) {
     auto ecs = EntityRegistry::getInstance();
     for(auto ent : _entities) {
         auto& physics = ecs->getComponent<PhysicsComponent>(ent);
         auto& transform = ecs->getComponent<TransformComponent>(ent);
 
         transform.lastPosition = transform.position; // always update this since last position is based on tile position previous turn
-        if(physics.velocity.x != 0.f) {
-            entityMoved = true;
-            transform.position.x += physics.velocity.x * timescale;
-            float friction = (physics.touchingGround) ? physics.frictionCoefficient : physics.airFrictionCoefficient;
-            moveToZero(physics.velocity.x, friction);
+        if(physics.velocity.x != 0.f || physics.velocity.y != 0.f) {
+            transform.position += physics.velocity;
+            physics.velocity = {0.f, 0.f};
         }
     }
-    return entityMoved;
-}
-
-bool PhysicsSystem::updateY(float timescale) {
-    bool entityMoved = false;
-    auto ecs = EntityRegistry::getInstance();
-    for(auto ent : _entities) {
-        entityMoved = true;
-        auto& physics = ecs->getComponent<PhysicsComponent>(ent);
-        auto& transform = ecs->getComponent<TransformComponent>(ent);
-
-        if(physics.touchingGround) {
-            physics.offGroundCount = 0;
-        }
-        else {
-            ++physics.offGroundCount;
-        }
-    }
-
-    return entityMoved;
-}
-
-void PhysicsSystem::setLevel(Level level) {
-    _level = level;
 }
 
 void PhysicsSystem::moveToZero(float &value, float amount) {

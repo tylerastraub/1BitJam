@@ -18,6 +18,8 @@ public:
     void setRenderBounds(strb::vec2 renderBounds);
 
 private:
+    const int RENDER_TILE_SIZE = 16;
+
     strb::vec2 _renderBounds = {0, 0};
 
 };

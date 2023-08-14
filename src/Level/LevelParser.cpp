@@ -115,14 +115,14 @@ Level LevelParser::parseLevelFromTmx(std::string filePath, SpritesheetID sprites
                         int xPos = object.getPosition().x / level.getTileSize();
                         int yPos = object.getPosition().y / level.getTileSize();
                         Tile tile = level.getTileAt(xPos, yPos);
-                        if(object.getClass() == "solid") {
-                            tile.type = TileType::SOLID;
+                        if(object.getClass() == "ground") {
+                            tile.type = TileType::GROUND;
+                        }
+                        else if(object.getClass() == "wall") {
+                            tile.type = TileType::WALL;
                         }
                         else if(object.getClass() == "hazard") {
                             tile.type = TileType::HAZARD;
-                        }
-                        else if(object.getClass() == "platform") {
-                            tile.type = TileType::PLATFORM;
                         }
                         level.setTileAt(xPos, yPos, tile);
                     }

@@ -130,11 +130,23 @@ bool Game::loadResources() {
     _text[TextSize::LARGE] = largeText;
 
     // Spritesheets
+    std::shared_ptr<Spritesheet> defaultTileset = std::make_shared<Spritesheet>();
+    if(!defaultTileset->load(_renderer, "res/spritesheet/default_tileset.png")) return false;
+    defaultTileset->setTileWidth(16);
+    defaultTileset->setTileHeight(16);
+    SpritesheetRegistry::addSpritesheet(SpritesheetID::DEFAULT_TILESET, defaultTileset);
+
     std::shared_ptr<Spritesheet> dialogueSpritesheet = std::make_shared<Spritesheet>();
     if(!dialogueSpritesheet->load(_renderer, "res/spritesheet/dialogue_box.png")) return false;
     dialogueSpritesheet->setTileWidth(320);
     dialogueSpritesheet->setTileHeight(32);
     SpritesheetRegistry::addSpritesheet(SpritesheetID::DIALOGUE_BOX, dialogueSpritesheet);
+    
+    std::shared_ptr<Spritesheet> playerSpritesheet = std::make_shared<Spritesheet>();
+    if(!playerSpritesheet->load(_renderer, "res/spritesheet/player_spritesheet.png")) return false;
+    playerSpritesheet->setTileWidth(16);
+    playerSpritesheet->setTileHeight(16);
+    SpritesheetRegistry::addSpritesheet(SpritesheetID::PLAYER, playerSpritesheet);
 
     // Audio
     _audioPlayer = std::make_unique<Audio>();

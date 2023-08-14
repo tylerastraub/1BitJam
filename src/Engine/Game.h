@@ -21,8 +21,8 @@ private:
     const char * _mediumTextFontPath = "res/font/MunroSmall.ttf";
     const char * _largeTextFontPath = "res/font/edit-undo.brk.ttf"; // temp
 
-    const int GAME_WIDTH = 320;
-    const int GAME_HEIGHT = 180;
+    const int GAME_WIDTH = 160;
+    const int GAME_HEIGHT = 90;
     int _renderScale = 4;
 
     SDL_Window* _window = nullptr;
