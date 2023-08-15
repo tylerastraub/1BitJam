@@ -45,7 +45,7 @@ void TileFlipSystem::render(int xOffset, int yOffset, Level* level) {
                     break;
             }
             Tile tile = level->getTileAt(transform.position.x + offset.x, transform.position.y + offset.y);
-            if(tile.status == TileStatus::DARK) {
+            if(tile.status != TileStatus::NOVAL) {
                 Spritesheet* hud = SpritesheetRegistry::getSpritesheet(SpritesheetID::HUD);
                 hud->setTileIndex(0, 0);
                 hud->setTileWidth(16);
@@ -53,14 +53,14 @@ void TileFlipSystem::render(int xOffset, int yOffset, Level* level) {
                 hud->render((transform.position.x + offset.x) * 16 + xOffset,
                     (transform.position.y + offset.y) * 16 + yOffset, 16, 16);
             }
-            else if(tile.status == TileStatus::LIGHT) {
-                Spritesheet* hud = SpritesheetRegistry::getSpritesheet(SpritesheetID::HUD);
-                hud->setTileIndex(1, 0);
-                hud->setTileWidth(16);
-                hud->setTileHeight(16);
-                hud->render((transform.position.x + offset.x) * 16 + xOffset,
-                    (transform.position.y + offset.y) * 16 + yOffset, 16, 16);
-            }
+            // else if(tile.status == TileStatus::LIGHT) {
+            //     Spritesheet* hud = SpritesheetRegistry::getSpritesheet(SpritesheetID::HUD);
+            //     hud->setTileIndex(1, 0);
+            //     hud->setTileWidth(16);
+            //     hud->setTileHeight(16);
+            //     hud->render((transform.position.x + offset.x) * 16 + xOffset,
+            //         (transform.position.y + offset.y) * 16 + yOffset, 16, 16);
+            // }
         }
     }
 }

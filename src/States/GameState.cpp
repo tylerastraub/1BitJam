@@ -21,6 +21,7 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 
 /**
  * TODO:
+ * - Figure out wtf we're doing for combat
  * - Add basic enemies
  * - Add turn system (WEGO)
  * - Add start/end/goal for levels (who knows what this will be)

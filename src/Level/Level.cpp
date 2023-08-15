@@ -1,5 +1,6 @@
 #include "Level.h"
 #include "EntityRegistry.h"
+#include "TileSpritesheetHelper.h"
 
 void Level::allocateTilemap(int width, int height) {
     if(width < 1 || height < 1) return;
@@ -33,6 +34,7 @@ void Level::render(int xOffset, int yOffset) {
                 continue;
                }
             Tile t = getTileAt(x, y);
+            if(t.type == TileType::GROUND) TileSpritesheetHelper::updateSpritesheetRect(this, {(float) x, (float) y});
             if(t.spritesheetRect.w == 0 && t.spritesheetRect.h == 0) continue;
 
             _tileset->setTileWidth(t.spritesheetRect.w);
