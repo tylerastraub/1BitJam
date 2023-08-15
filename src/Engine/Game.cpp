@@ -147,6 +147,12 @@ bool Game::loadResources() {
     playerSpritesheet->setTileWidth(16);
     playerSpritesheet->setTileHeight(16);
     SpritesheetRegistry::addSpritesheet(SpritesheetID::PLAYER, playerSpritesheet);
+    
+    std::shared_ptr<Spritesheet> hudSpritesheet = std::make_shared<Spritesheet>();
+    if(!hudSpritesheet->load(_renderer, "res/spritesheet/hud_spritesheet.png")) return false;
+    hudSpritesheet->setTileWidth(16);
+    hudSpritesheet->setTileHeight(16);
+    SpritesheetRegistry::addSpritesheet(SpritesheetID::HUD, hudSpritesheet);
 
     // Audio
     _audioPlayer = std::make_unique<Audio>();

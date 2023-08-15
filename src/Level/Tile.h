@@ -10,8 +10,15 @@ enum class TileType {
     HAZARD,
 };
 
+enum class TileStatus {
+    NOVAL = -1,
+    DARK,
+    LIGHT,
+};
+
 struct Tile {
     TileType type = TileType::NOVAL;
+    TileStatus status = TileStatus::NOVAL;
     SDL_Rect spritesheetRect = {0, 0, 0, 0};
 };
 

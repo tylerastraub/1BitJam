@@ -13,6 +13,7 @@
 #include "CameraSystem.h"
 #include "PhysicsSystem.h"
 #include "CollisionSystem.h"
+#include "TileFlipSystem.h"
 
 #include <memory>
 
@@ -47,6 +48,7 @@ private:
     std::shared_ptr<CameraSystem> _cameraSystem = nullptr;
     std::shared_ptr<PhysicsSystem> _physicsSystem = nullptr;
     std::shared_ptr<CollisionSystem> _collisionSystem = nullptr;
+    std::shared_ptr<TileFlipSystem> _tileFlipSystem = nullptr;
 
     SDL_FPoint _renderOffset = {0.f, 0.f};
 };

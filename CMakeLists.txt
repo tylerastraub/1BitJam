@@ -73,6 +73,7 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/DialogueTrigger.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/PrefabSpawnTrigger.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/ScriptSystem.cpp
+    ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/TileFlipSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Input/InputSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Physics/CollisionSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Physics/PhysicsSystem.cpp

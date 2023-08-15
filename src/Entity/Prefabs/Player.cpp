@@ -11,6 +11,7 @@
 #include "StateComponent.h"
 #include "PhysicsComponent.h"
 #include "CollisionComponent.h"
+#include "TileFlipComponent.h"
 
 namespace {
     class PlayerScript : public IScript {
@@ -39,11 +40,12 @@ namespace prefab {
         ecs->addComponent<PlayerComponent>(ent, PlayerComponent{});
         ecs->addComponent<TransformComponent>(ent, TransformComponent{{x, y}, {x, y}});
         ecs->addComponent<DirectionComponent>(ent, DirectionComponent{Direction::SOUTH});
-        ecs->addComponent<InputComponent>(ent, InputComponent{{InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT, InputEvent::ACTION}});
+        ecs->addComponent<InputComponent>(ent, InputComponent{{InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT, InputEvent::ACTION, InputEvent::LOCK}});
         ecs->addComponent<ScriptComponent>(ent, ScriptComponent{std::make_shared<PlayerScript>()});
         ecs->addComponent<StateComponent>(ent, StateComponent{EntityState::IDLE});
         ecs->addComponent<PhysicsComponent>(ent, PhysicsComponent{{0.f, 0.f}, {1.f, 1.f}});
         ecs->addComponent<CollisionComponent>(ent, CollisionComponent{});
+        ecs->addComponent<TileFlipComponent>(ent, TileFlipComponent{true});
 
         RenderComponent render;
         render.renderQuad = {0, 0, 16, 16};

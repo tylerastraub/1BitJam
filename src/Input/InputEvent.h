@@ -7,8 +7,8 @@ enum class InputEvent {
     DOWN,
     LEFT,
     RIGHT,
-    JUMP,
     ACTION,
+    LOCK,
 };
 
 #endif

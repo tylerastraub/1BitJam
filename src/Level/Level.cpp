@@ -84,7 +84,7 @@ Tile Level::getTileAt(int x, int y) {
     if(x >= 0 && x < _tilemapWidth && y >= 0 && y < _tilemapHeight) {
         return _tilemap[y][x];
     }
-    return Tile{TileType::NOVAL, {0, 0, 0, 0}};
+    return Tile{TileType::NOVAL, TileStatus::NOVAL, {0, 0, 0, 0}};
 }
 
 int Level::getTileSize() {
