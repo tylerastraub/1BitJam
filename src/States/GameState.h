@@ -50,7 +50,7 @@ private:
     std::shared_ptr<CollisionSystem> _collisionSystem = nullptr;
     std::shared_ptr<TileFlipSystem> _tileFlipSystem = nullptr;
 
-    SDL_FPoint _renderOffset = {0.f, 0.f};
+    strb::vec2 _renderOffset = {0.f, 0.f};
 };
 
 #endif

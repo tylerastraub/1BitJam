@@ -5,6 +5,7 @@
 #include "TileFlipComponent.h"
 #include "DirectionComponent.h"
 #include "TransformComponent.h"
+#include "StateComponent.h"
 
 #include <algorithm>
 
@@ -21,6 +22,8 @@ void InputSystem::update() {
         auto& physics = ecs->getComponent<PhysicsComponent>(ent);
         auto& dir = ecs->getComponent<DirectionComponent>(ent);
         auto& tileFlip = ecs->getComponent<TileFlipComponent>(ent);
+        auto& transform = ecs->getComponent<TransformComponent>(ent);
+        auto& state = ecs->getComponent<StateComponent>(ent);
         auto allowedInputs = inputComponent.allowedInputs;
 
         // Lock input
@@ -33,31 +36,58 @@ void InputSystem::update() {
         }
 
         // X inputs
-        if(inputPressed(InputEvent::LEFT) &&
+        if(inputDown(InputEvent::LEFT) &&
            std::find(allowedInputs.begin(), allowedInputs.end(), InputEvent::LEFT) != allowedInputs.end()) {
             _inputRequested = true;
-            if(!tileFlip.isLocked) physics.velocity.x = physics.moveSpeed.x * -1;
-            dir.direction = Direction::WEST;
+            if(transform.goalPosition == transform.position) {
+                if(!tileFlip.isLocked) {
+                    transform.goalPosition.x = transform.position.x - 1;   
+                    state.state = EntityState::MOVING;
+                }
+                dir.direction = Direction::WEST;
+            }
         }
-        else if(inputPressed(InputEvent::RIGHT) &&
+        if(inputDown(InputEvent::RIGHT) &&
            std::find(allowedInputs.begin(), allowedInputs.end(), InputEvent::RIGHT) != allowedInputs.end()) {
             _inputRequested = true;
-            if(!tileFlip.isLocked) physics.velocity.x = physics.moveSpeed.x;
-            dir.direction = Direction::EAST;
+            if(transform.goalPosition == transform.position) {
+                if(!tileFlip.isLocked) {
+                    transform.goalPosition.x = transform.position.x + 1;
+                    state.state = EntityState::MOVING;
+                }
+                dir.direction = Direction::EAST;
+            }
         }
-
         // Y inputs
-        if(inputPressed(InputEvent::UP) &&
+        if(inputDown(InputEvent::UP) &&
            std::find(allowedInputs.begin(), allowedInputs.end(), InputEvent::UP) != allowedInputs.end()) {
             _inputRequested = true;
-            if(!tileFlip.isLocked) physics.velocity.y = physics.moveSpeed.y * -1;
-            dir.direction = Direction::NORTH;
+            if(transform.goalPosition == transform.position) {
+                if(!tileFlip.isLocked) {
+                    transform.goalPosition.y = transform.position.y - 1;
+                    state.state = EntityState::MOVING;
+                }
+                dir.direction = Direction::NORTH;
+            }
         }
-        else if(inputPressed(InputEvent::DOWN) &&
+        if(inputDown(InputEvent::DOWN) &&
            std::find(allowedInputs.begin(), allowedInputs.end(), InputEvent::DOWN) != allowedInputs.end()) {
             _inputRequested = true;
-            if(!tileFlip.isLocked) physics.velocity.y = physics.moveSpeed.y;
-            dir.direction = Direction::SOUTH;
+            if(transform.goalPosition == transform.position) {
+                if(!tileFlip.isLocked) {
+                    transform.goalPosition.y = transform.position.y + 1;
+                    state.state = EntityState::MOVING;
+                }
+                dir.direction = Direction::SOUTH;
+            }
+        }
+        // State check
+        if(inputUp(InputEvent::LEFT) &&
+           inputUp(InputEvent::RIGHT) &&
+           inputUp(InputEvent::UP) &&
+           inputUp(InputEvent::DOWN) &&
+           transform.goalPosition == transform.position) {
+            state.state = EntityState::IDLE;
         }
 
         // Other inputs

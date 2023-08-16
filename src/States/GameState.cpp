@@ -21,11 +21,9 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 
 /**
  * TODO:
- * - Figure out wtf we're doing for combat
+ * - Determine final plan for painting mechanic
+ * - Remove tile flip/revamp lock system
  * - Add basic enemies
- * - Add turn system (WEGO)
- * - Add start/end/goal for levels (who knows what this will be)
- *     - Maybe roguelite progression here where you complete levels at own pace, but need some sort of motive for killing enemies
  * - Add level generation (or create premade levels)
  * - Add items/level entities (torch?)
  * - Animate lock selection
@@ -114,16 +112,11 @@ void GameState::tick(float timescale) {
     // Camera
     auto& pTransform = ecs->getComponent<TransformComponent>(_player);
     auto& pRender = ecs->getComponent<RenderComponent>(_player);
-    _cameraSystem->setGoalCameraOffset(pTransform.position.x * _level.getTileSize() + pRender.renderQuadOffset.x + pRender.renderQuad.w / 2 - getGameSize().x / 2,
-        pTransform.position.y * _level.getTileSize() + pRender.renderQuadOffset.y + pRender.renderQuad.h / 2 - getGameSize().y / 2);
+    _cameraSystem->setGoalCameraOffset((int) (pTransform.position.x * _level.getTileSize()) + pRender.renderQuadOffset.x + pRender.renderQuad.w / 2 - getGameSize().x / 2,
+        (int) (pTransform.position.y * _level.getTileSize()) + pRender.renderQuadOffset.y + pRender.renderQuad.h / 2 - getGameSize().y / 2);
     _cameraSystem->update(timescale);
 
-    float playerXRemainder = pTransform.position.x * _level.getTileSize() - (int) pTransform.position.x * _level.getTileSize();
-    float playerYRemainder = pTransform.position.y * _level.getTileSize() - (int) pTransform.position.y * _level.getTileSize();
-    if(_cameraSystem->atXEdge()) playerXRemainder = 0.f;
-    if(_cameraSystem->atYEdge()) playerYRemainder = 0.f;
-    _renderOffset.x = (int) (_cameraSystem->getCurrentCameraOffset().x + playerXRemainder);
-    _renderOffset.y = (int) (_cameraSystem->getCurrentCameraOffset().y + playerYRemainder);
+    _renderOffset = _cameraSystem->getCurrentCameraOffset();
 }
 
 void GameState::render() {

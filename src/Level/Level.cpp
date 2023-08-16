@@ -1,6 +1,7 @@
 #include "Level.h"
 #include "EntityRegistry.h"
 #include "TileSpritesheetHelper.h"
+#include "TransformComponent.h"
 
 void Level::allocateTilemap(int width, int height) {
     if(width < 1 || height < 1) return;
@@ -26,6 +27,7 @@ void Level::spawnPrefabs() {
 }
 
 void Level::render(int xOffset, int yOffset) {
+    auto playerPos = EntityRegistry::getInstance()->getComponent<TransformComponent>(_playerId).position;
     if(_tileset == nullptr) return;
     for(int x = 0; x < _tilemapWidth; ++x) {
         for(int y = 0; y < _tilemapHeight; ++y) {
@@ -34,7 +36,8 @@ void Level::render(int xOffset, int yOffset) {
                 continue;
                }
             Tile t = getTileAt(x, y);
-            if(t.type == TileType::GROUND) TileSpritesheetHelper::updateSpritesheetRect(this, {(float) x, (float) y});
+            // if(playerPos.x == x && playerPos.y == y) t.spritesheetRect = {0, 0, 16, 16};
+            /*else*/ if(t.type == TileType::GROUND) TileSpritesheetHelper::updateSpritesheetRect(this, {(float) x, (float) y});
             if(t.spritesheetRect.w == 0 && t.spritesheetRect.h == 0) continue;
 
             _tileset->setTileWidth(t.spritesheetRect.w);

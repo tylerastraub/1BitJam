@@ -6,6 +6,7 @@
 struct TransformComponent {
     strb::vec2 position;
     strb::vec2 lastPosition;
+    strb::vec2 goalPosition;
 };
 
 #endif

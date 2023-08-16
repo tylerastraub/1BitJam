@@ -13,10 +13,58 @@ void PhysicsSystem::update(float timescale) {
         auto& transform = ecs->getComponent<TransformComponent>(ent);
 
         transform.lastPosition = transform.position; // always update this since last position is based on tile position previous turn
-        if(physics.velocity.x != 0.f || physics.velocity.y != 0.f) {
-            transform.position += physics.velocity;
-            physics.velocity = {0.f, 0.f};
+
+        // checks for if entity is moving
+        if(transform.position.x < transform.goalPosition.x) {
+            // physics.velocity.x = ((1 - physics.moveSpeed.x) * transform.position.x) + (physics.moveSpeed.x * transform.goalPosition.x) - transform.position.x;
+            physics.velocity.x = physics.moveSpeed.x;
         }
+        else if(transform.position.x > transform.goalPosition.x) {
+            // physics.velocity.x = ((1 - physics.moveSpeed.x) * transform.position.x) + (physics.moveSpeed.x * transform.goalPosition.x) - transform.position.x;
+            physics.velocity.x = physics.moveSpeed.x * -1;
+        }
+        else {
+            physics.velocity.x = 0.f;
+        }
+        if(transform.position.y < transform.goalPosition.y) {
+            // physics.velocity.y = ((1 - physics.moveSpeed.y) * transform.position.y) + (physics.moveSpeed.y * transform.goalPosition.y) - transform.position.y;
+            physics.velocity.y = physics.moveSpeed.y;
+        }
+        else if(transform.position.y > transform.goalPosition.y) {
+            // physics.velocity.y = ((1 - physics.moveSpeed.y) * transform.position.y) + (physics.moveSpeed.y * transform.goalPosition.y) - transform.position.y;
+            physics.velocity.y = physics.moveSpeed.y * -1;
+        }
+        else {
+            physics.velocity.y = 0.f;
+        }
+
+        // checks for if entity is about to reach destination. if so, place entity right on goal position
+        if(physics.velocity.x < 0) {
+            if(transform.position.x - physics.moveSpeed.x < transform.goalPosition.x) {
+                physics.velocity.x = 0;
+                transform.position.x = transform.goalPosition.x;
+            }
+        }
+        else if(physics.velocity.x > 0) {
+            if(transform.position.x + physics.moveSpeed.x > transform.goalPosition.x) {
+                physics.velocity.x = 0;
+                transform.position.x = transform.goalPosition.x;
+            }
+        }
+        if(physics.velocity.y < 0) {
+            if(transform.position.y - physics.moveSpeed.y < transform.goalPosition.y) {
+                physics.velocity.y = 0;
+                transform.position.y = transform.goalPosition.y;
+            }
+        }
+        else if(physics.velocity.y > 0) {
+            if(transform.position.y + physics.moveSpeed.y > transform.goalPosition.y) {
+                physics.velocity.y = 0;
+                transform.position.y = transform.goalPosition.y;
+            }
+        }
+        // finally, just move normally
+        transform.position += physics.velocity;
     }
 }
 
