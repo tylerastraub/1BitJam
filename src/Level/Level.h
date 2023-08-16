@@ -35,8 +35,14 @@ public:
     int getTilemapHeight();
     Entity getPlayerId();
     LightMap* getLightMap();
+    /**
+     * Returns the number of painted tiles (pair.first) and how many tiles can be painted in total (pair.second).
+    */
+    std::pair<int, int> getPaintedTileStatus();
 
 private:
+    void updatePaintTiles();
+
     std::shared_ptr<LightMap> _lMap = nullptr;
     std::vector<std::vector<Tile>> _tilemap;
     int _tilemapWidth = 0;
@@ -46,6 +52,9 @@ private:
 
     std::vector<Entity> _prefabs;
     Entity _playerId;
+
+    int _numOfPaintedTiles = 0;
+    int _numOfPaintableTiles = 0;
 
 };
 

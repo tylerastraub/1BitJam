@@ -7,6 +7,7 @@ enum class SpritesheetID {
     DEFAULT_TILESET,
     PLAYER,
     HUD,
+    PAINT_METER,
 };
 
 #endif

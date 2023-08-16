@@ -16,6 +16,9 @@ public:
     void setAudio(Audio* audio);
     void setTimer(int ms);
     void setTimerResetDefault(int ms);
+    void setTimerAutoReset(bool autoReset);
+    void changeToTimer();
+    void chagneToStopwatch();
 
     int getTimer();
     int getMostRecentSecond();
@@ -28,6 +31,8 @@ private:
     int _timer = 0;
     int _timerResetDefault = 0;
     int _mostRecentSecond = 0;
+    int _countingCoefficient = -1;
+    bool _autoTimerReset = false;
 
 };
 

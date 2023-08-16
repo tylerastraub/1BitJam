@@ -104,6 +104,10 @@ void GameState::tick(float timescale) {
     _cameraSystem->update(timescale);
 
     _renderOffset = _cameraSystem->getCurrentCameraOffset();
+
+    // Paint
+    std::pair<int, int> paintStatus = _level.getPaintedTileStatus();
+    if(paintStatus.second != 0) _paintPercent = static_cast<float>(paintStatus.first) / static_cast<float>(paintStatus.second);
 }
 
 void GameState::render() {
@@ -115,6 +119,17 @@ void GameState::render() {
     _renderSystem->render(getRenderer(), (int) _renderOffset.x, (int) _renderOffset.y);
 
     _tileFlipSystem->render((int) _renderOffset.x, (int) _renderOffset.y, &_level);
+
+    // Paint percent render
+    Spritesheet* paintMeter = SpritesheetRegistry::getSpritesheet(SpritesheetID::PAINT_METER);
+    int paintMeterY = getGameSize().y / 2.f - paintMeter->getHeight() / 2.f;
+    paintMeter->render(0, paintMeterY, paintMeter->getWidth(), paintMeter->getHeight());
+    SDL_SetRenderDrawColor(getRenderer(), 0xFF, 0xFF, 0xFF, 0xFF);
+    const int PERCENT_PAINTED_MAX_HEIGHT = 50;
+    int percentPaintedHeight = PERCENT_PAINTED_MAX_HEIGHT * _paintPercent;
+    if(percentPaintedHeight < 1) percentPaintedHeight = 1;
+    SDL_Rect percentPaintedProgress = {3, paintMeterY + 3 + PERCENT_PAINTED_MAX_HEIGHT - percentPaintedHeight, 2, percentPaintedHeight};
+    SDL_RenderFillRect(getRenderer(), &percentPaintedProgress);
 
     SDL_RenderPresent(getRenderer());
 }

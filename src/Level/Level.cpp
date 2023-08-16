@@ -56,6 +56,7 @@ void Level::setTilemap(std::vector<std::vector<Tile>> tilemap) {
     if(_tilemap.size() > 0) {
         _tilemapWidth = _tilemap[0].size();
     }
+    updatePaintTiles();
 }
 
 void Level::setLightMap(std::shared_ptr<LightMap> lMap) {
@@ -68,6 +69,13 @@ void Level::setTileSize(int tileSize) {
 
 void Level::setTileAt(int x, int y, Tile tile) {
     if(x >= 0 && x < _tilemapWidth && y >= 0 && y < _tilemapHeight) {
+        Tile oldTile = getTileAt(x, y);
+        if(oldTile.type == TileType::GROUND &&
+           oldTile.status == TileStatus::DARK &&
+           tile.type == TileType::GROUND &&
+           tile.status == TileStatus::LIGHT) {
+            ++_numOfPaintedTiles;
+        }
         _tilemap[y][x] = tile;
     }
 }
@@ -109,4 +117,23 @@ Entity Level::getPlayerId() {
 
 LightMap* Level::getLightMap() {
     return _lMap.get();
+}
+
+std::pair<int, int> Level::getPaintedTileStatus() {
+    return std::make_pair(_numOfPaintedTiles, _numOfPaintableTiles);
+}
+
+void Level::updatePaintTiles() {
+    _numOfPaintableTiles = 0;
+    _numOfPaintedTiles = 0;
+    for(size_t x = 0; x < _tilemapWidth; ++x) {
+        for(size_t y = 0; y < _tilemapHeight; ++y) {
+            if(getTileAt(x, y).type == TileType::GROUND) {
+                ++_numOfPaintableTiles;
+                if(getTileAt(x, y).status == TileStatus::LIGHT) {
+                    ++_numOfPaintedTiles;
+                }
+            }
+        }
+    }
 }

@@ -139,6 +139,7 @@ void Text::setString(std::string s) {
             if(currentWord.h > _height) _height = currentWord.h;
         }
     }
+    if(currentWord.w > _width) _width = currentWord.w;
     if(!currentWord.text.empty()) _words.push_back(currentWord); // add that last word
 }
 

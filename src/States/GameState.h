@@ -6,6 +6,7 @@
 #include "Mouse.h"
 #include "Controller.h"
 #include "Level.h"
+#include "Timer.h"
 // Systems
 #include "InputSystem.h"
 #include "RenderSystem.h"
@@ -53,6 +54,9 @@ private:
     std::shared_ptr<PaintSystem> _paintSystem = nullptr;
 
     strb::vec2 _renderOffset = {0.f, 0.f};
+
+    Timer _timer;
+    float _paintPercent = 0.f; // percent from 0-1
 };
 
 #endif
