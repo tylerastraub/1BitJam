@@ -12,6 +12,7 @@
 #include "PhysicsComponent.h"
 #include "CollisionComponent.h"
 #include "TileFlipComponent.h"
+#include "PainterComponent.h"
 // Prefabs
 #include "Player.h"
 
@@ -107,6 +108,8 @@ void GameState::tick(float timescale) {
 
     _physicsSystem->update(timescale);
 
+    _paintSystem->update(&_level);
+
     _renderSystem->update(timescale);
 
     // Camera
@@ -190,6 +193,12 @@ void GameState::initSystems() {
     _tileFlipSystem->_audioPlayer = getAudioPlayer();
     sig.set(ecs->getComponentType<TileFlipComponent>(), true);
     ecs->setSystemSignature<TileFlipSystem>(sig);
+    
+    sig.reset();
+    _paintSystem = ecs->registerSystem<PaintSystem>();
+    _paintSystem->_audioPlayer = getAudioPlayer();
+    sig.set(ecs->getComponentType<PainterComponent>(), true);
+    ecs->setSystemSignature<PaintSystem>(sig);
 }
 
 void GameState::initPrefabs() {

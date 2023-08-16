@@ -13,6 +13,7 @@
 #include "CollisionComponent.h"
 #include "TileFlipComponent.h"
 #include "AnimationComponent.h"
+#include "PainterComponent.h"
 
 namespace {
     class PlayerScript : public IScript {
@@ -22,6 +23,15 @@ namespace {
 
         void update(Entity owner, float timescale, Audio* audio) override {
             auto ecs = EntityRegistry::getInstance();
+            auto& transform = ecs->getComponent<TransformComponent>(owner);
+            auto& input = ecs->getComponent<InputComponent>(owner);
+
+            if(transform.position == transform.goalPosition) {
+                input.allowedInputs = {InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT, InputEvent::ACTION, InputEvent::LOCK};
+            }
+            else {
+                input.allowedInputs = {InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT};
+            }
         }
 
     private:
@@ -46,7 +56,8 @@ namespace prefab {
         ecs->addComponent<StateComponent>(ent, StateComponent{EntityState::IDLE});
         ecs->addComponent<PhysicsComponent>(ent, PhysicsComponent{{0.f, 0.f}, {0.035f, 0.035f}});
         ecs->addComponent<CollisionComponent>(ent, CollisionComponent{});
-        ecs->addComponent<TileFlipComponent>(ent, TileFlipComponent{true});
+        ecs->addComponent<TileFlipComponent>(ent, TileFlipComponent{false}); // disable for now but can still use lock
+        ecs->addComponent<PainterComponent>(ent, PainterComponent{true, TileStatus::LIGHT});
 
         RenderComponent render;
         render.renderQuad = {0, 0, 16, 16};
