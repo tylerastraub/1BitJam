@@ -92,7 +92,7 @@ void GameState::tick(float timescale) {
 
     _physicsSystem->update(timescale);
 
-    _paintSystem->update(&_level);
+    _paintSystem->update(timescale, &_level);
 
     _renderSystem->update(timescale);
 

@@ -14,6 +14,9 @@
 #include "TileFlipComponent.h"
 #include "AnimationComponent.h"
 #include "PainterComponent.h"
+#include "PaintAttackComponent.h"
+
+#include <cmath>
 
 namespace {
     class PlayerScript : public IScript {
@@ -25,12 +28,32 @@ namespace {
             auto ecs = EntityRegistry::getInstance();
             auto& transform = ecs->getComponent<TransformComponent>(owner);
             auto& input = ecs->getComponent<InputComponent>(owner);
+            auto& painter = ecs->getComponent<PainterComponent>(owner);
+            auto& paintAttack = ecs->getComponent<PaintAttackComponent>(owner);
+            auto& state = ecs->getComponent<StateComponent>(owner);
+            auto& physics = ecs->getComponent<PhysicsComponent>(owner);
+            painter.requestsPaint = true;
+            painter.paintPos = {std::roundf(transform.position.x), std::roundf(transform.position.y)};
 
-            if(transform.position == transform.goalPosition) {
+            if(paintAttack.msSinceLastPaintAttack < paintAttack.msCantActAfterPaintAttack) {
+                input.allowedInputs = {};
+            }
+            else if(transform.position == transform.goalPosition) {
                 input.allowedInputs = {InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT, InputEvent::ACTION, InputEvent::LOCK};
             }
             else {
                 input.allowedInputs = {InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT};
+            }
+
+            // state checking
+            if(paintAttack.msSinceLastPaintAttack < paintAttack.msCantActAfterPaintAttack) {
+                state.state = EntityState::PAINTING;
+            }
+            else if(physics.velocity.x != 0.f || physics.velocity.y != 0.f) {
+                state.state = EntityState::MOVING;
+            }
+            else {
+                state.state = EntityState::IDLE;
             }
         }
 
@@ -58,6 +81,7 @@ namespace prefab {
         ecs->addComponent<CollisionComponent>(ent, CollisionComponent{});
         ecs->addComponent<TileFlipComponent>(ent, TileFlipComponent{false}); // disable for now but can still use lock
         ecs->addComponent<PainterComponent>(ent, PainterComponent{true, TileStatus::LIGHT});
+        ecs->addComponent<PaintAttackComponent>(ent, PaintAttackComponent{});
 
         RenderComponent render;
         render.renderQuad = {0, 0, 16, 16};
@@ -180,6 +204,58 @@ namespace prefab {
             {-1, -1} // center
         };
         propsComp.addSpritesheetProperties(EntityState::MOVING, Direction::NORTH, movingNorth);
+
+        SpritesheetProperties paintingSouth = {
+            0, // xTileIndex
+            6, // yTileIndex
+            true, // isAnimated
+            false, // isLooped
+            NUM_OF_PAINTING_FRAMES, // numOfFrames
+            MS_BETWEEN_PAINTING_FRAMES, // msBetweenFrames
+            SDL_FLIP_NONE, // flip
+            0.0, // angle
+            {-1, -1} // center
+        };
+        propsComp.addSpritesheetProperties(EntityState::PAINTING, Direction::SOUTH, paintingSouth);
+
+        SpritesheetProperties paintingEast = {
+            0, // xTileIndex
+            7, // yTileIndex
+            true, // isAnimated
+            false, // isLooped
+            NUM_OF_PAINTING_FRAMES, // numOfFrames
+            MS_BETWEEN_PAINTING_FRAMES, // msBetweenFrames
+            SDL_FLIP_NONE, // flip
+            0.0, // angle
+            {-1, -1} // center
+        };
+        propsComp.addSpritesheetProperties(EntityState::PAINTING, Direction::EAST, paintingEast);
+
+        SpritesheetProperties paintingWest = {
+            0, // xTileIndex
+            7, // yTileIndex
+            true, // isAnimated
+            false, // isLooped
+            NUM_OF_PAINTING_FRAMES, // numOfFrames
+            MS_BETWEEN_PAINTING_FRAMES, // msBetweenFrames
+            SDL_FLIP_HORIZONTAL, // flip
+            0.0, // angle
+            {-1, -1} // center
+        };
+        propsComp.addSpritesheetProperties(EntityState::PAINTING, Direction::WEST, paintingWest);
+
+        SpritesheetProperties paintingNorth = {
+            0, // xTileIndex
+            8, // yTileIndex
+            true, // isAnimated
+            false, // isLooped
+            NUM_OF_PAINTING_FRAMES, // numOfFrames
+            MS_BETWEEN_PAINTING_FRAMES, // msBetweenFrames
+            SDL_FLIP_NONE, // flip
+            0.0, // angle
+            {-1, -1} // center
+        };
+        propsComp.addSpritesheetProperties(EntityState::PAINTING, Direction::NORTH, paintingNorth);
 
         return propsComp;
     }

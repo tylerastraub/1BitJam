@@ -6,6 +6,8 @@
 #include "DirectionComponent.h"
 #include "TransformComponent.h"
 #include "StateComponent.h"
+#include "PaintAttackComponent.h"
+#include "PainterComponent.h"
 
 #include <algorithm>
 
@@ -42,7 +44,6 @@ void InputSystem::update() {
             if(transform.goalPosition == transform.position) {
                 if(!tileFlip.isLocked) {
                     transform.goalPosition.x = transform.position.x - 1;   
-                    state.state = EntityState::MOVING;
                 }
                 dir.direction = Direction::WEST;
             }
@@ -53,7 +54,6 @@ void InputSystem::update() {
             if(transform.goalPosition == transform.position) {
                 if(!tileFlip.isLocked) {
                     transform.goalPosition.x = transform.position.x + 1;
-                    state.state = EntityState::MOVING;
                 }
                 dir.direction = Direction::EAST;
             }
@@ -65,7 +65,6 @@ void InputSystem::update() {
             if(transform.goalPosition == transform.position) {
                 if(!tileFlip.isLocked) {
                     transform.goalPosition.y = transform.position.y - 1;
-                    state.state = EntityState::MOVING;
                 }
                 dir.direction = Direction::NORTH;
             }
@@ -76,29 +75,20 @@ void InputSystem::update() {
             if(transform.goalPosition == transform.position) {
                 if(!tileFlip.isLocked) {
                     transform.goalPosition.y = transform.position.y + 1;
-                    state.state = EntityState::MOVING;
                 }
                 dir.direction = Direction::SOUTH;
             }
-        }
-        // State check
-        if(inputUp(InputEvent::LEFT) &&
-           inputUp(InputEvent::RIGHT) &&
-           inputUp(InputEvent::UP) &&
-           inputUp(InputEvent::DOWN) &&
-           transform.goalPosition == transform.position) {
-            state.state = EntityState::IDLE;
         }
 
         // Other inputs
         if(inputPressed(InputEvent::ACTION) &&
            std::find(allowedInputs.begin(), allowedInputs.end(), InputEvent::ACTION) != allowedInputs.end() &&
-           ecs->hasComponent<TileFlipComponent>(ent) &&
+           ecs->hasComponent<PaintAttackComponent>(ent) &&
            ecs->hasComponent<DirectionComponent>(ent)) {
             _inputRequested = true;
-            auto& transform = ecs->getComponent<TransformComponent>(ent);
-            if(tileFlip.canFlipTiles) {
-                tileFlip.isFlippingTile = true;
+            auto& paintAttack = ecs->getComponent<PaintAttackComponent>(ent);
+            if(paintAttack.msSinceLastPaintAttack > paintAttack.msCantActAfterPaintAttack) {
+                paintAttack.msSinceLastPaintAttack = 0;
                 strb::vec2 offset = {0.f, 0.f};
                 switch(dir.direction) {
                     case Direction::NORTH:
@@ -114,7 +104,9 @@ void InputSystem::update() {
                         offset.x += 1;
                         break;
                 }
-                tileFlip.tileFlipPos = transform.position + offset;
+                auto& painter = ecs->getComponent<PainterComponent>(ent);
+                painter.paintPos = transform.position + offset;
+                painter.requestsPaint = true;
             }
         }
     }

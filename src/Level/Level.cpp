@@ -69,6 +69,7 @@ void Level::setTileSize(int tileSize) {
 
 void Level::setTileAt(int x, int y, Tile tile) {
     if(x >= 0 && x < _tilemapWidth && y >= 0 && y < _tilemapHeight) {
+        // painted tiles update
         Tile oldTile = getTileAt(x, y);
         if(oldTile.type == TileType::GROUND &&
            oldTile.status == TileStatus::DARK &&
@@ -76,6 +77,13 @@ void Level::setTileAt(int x, int y, Tile tile) {
            tile.status == TileStatus::LIGHT) {
             ++_numOfPaintedTiles;
         }
+        else if(oldTile.type == TileType::GROUND &&
+                oldTile.status == TileStatus::LIGHT &&
+                tile.type == TileType::GROUND &&
+                tile.status == TileStatus::DARK) {
+            --_numOfPaintedTiles;
+        }
+        // then actually set the tile
         _tilemap[y][x] = tile;
     }
 }

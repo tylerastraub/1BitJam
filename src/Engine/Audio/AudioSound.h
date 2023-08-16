@@ -6,6 +6,7 @@ enum class AudioSound {
     ACTION,
     CHARACTER_BLIP,
     TILE_FLIP,
+    PAINT,
 };
 
 #endif

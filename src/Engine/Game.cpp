@@ -163,6 +163,7 @@ bool Game::loadResources() {
     // Audio
     _audioPlayer = std::make_unique<Audio>();
     if(!_audioPlayer->addAudio(AudioSound::CHARACTER_BLIP, "res/audio/character_blip.wav")) return false;
+    if(!_audioPlayer->addAudio(AudioSound::PAINT, "res/audio/paint1.wav")) return false;
 
     return true;
 }

@@ -9,7 +9,7 @@ public:
     PaintSystem() = default;
     ~PaintSystem() = default;
 
-    void update(Level* level);
+    void update(float timescale, Level* level);
 
 private:
 
