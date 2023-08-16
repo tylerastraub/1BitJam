@@ -36,8 +36,7 @@ void Level::render(int xOffset, int yOffset) {
                 continue;
                }
             Tile t = getTileAt(x, y);
-            // if(playerPos.x == x && playerPos.y == y) t.spritesheetRect = {0, 0, 16, 16};
-            /*else*/ if(t.type == TileType::GROUND) TileSpritesheetHelper::updateSpritesheetRect(this, {(float) x, (float) y});
+            if(t.type == TileType::GROUND || t.type == TileType::WALL) TileSpritesheetHelper::updateSpritesheetRect(this, {(float) x, (float) y});
             if(t.spritesheetRect.w == 0 && t.spritesheetRect.h == 0) continue;
 
             _tileset->setTileWidth(t.spritesheetRect.w);

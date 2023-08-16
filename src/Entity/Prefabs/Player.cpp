@@ -54,7 +54,7 @@ namespace prefab {
         ecs->addComponent<InputComponent>(ent, InputComponent{{InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT, InputEvent::ACTION, InputEvent::LOCK}});
         ecs->addComponent<ScriptComponent>(ent, ScriptComponent{std::make_shared<PlayerScript>()});
         ecs->addComponent<StateComponent>(ent, StateComponent{EntityState::IDLE});
-        ecs->addComponent<PhysicsComponent>(ent, PhysicsComponent{{0.f, 0.f}, {0.035f, 0.035f}});
+        ecs->addComponent<PhysicsComponent>(ent, PhysicsComponent{{0.f, 0.f}, {0.045f, 0.045f}});
         ecs->addComponent<CollisionComponent>(ent, CollisionComponent{});
         ecs->addComponent<TileFlipComponent>(ent, TileFlipComponent{false}); // disable for now but can still use lock
         ecs->addComponent<PainterComponent>(ent, PainterComponent{true, TileStatus::LIGHT});

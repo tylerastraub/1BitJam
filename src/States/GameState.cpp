@@ -22,17 +22,14 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 
 /**
  * TODO:
- * - Determine final plan for painting mechanic
+ * - Make paint mechanic FUN!! Explode enemies to paint. Get powerups to paint more efficiently. Definitely don't require 100% paint coverage
+ *     - Can move on to next floor only after painting certain amount
  * - Remove tile flip/revamp lock system
  * - Add basic enemies
  * - Add level generation (or create premade levels)
- * - Add items/level entities (torch?)
- * - Animate lock selection
 */
 
 bool GameState::init() {
-    auto ecs = EntityRegistry::getInstance();
-    ecs->init();
 
     // Input
     _keyboard = std::make_unique<Keyboard>();
@@ -43,42 +40,29 @@ bool GameState::init() {
     Tile d = {TileType::GROUND, TileStatus::DARK, {0, 0, 16, 16}}; //dark tile
     Tile l = {TileType::GROUND, TileStatus::LIGHT, {1, 0, 16, 16}}; //light tile
     Tile e = {TileType::WALL, TileStatus::NOVAL, {2, 0, 16, 16}}; //empty tile
-    /**
-     * wall tiles. key is as follows:
-     * 1 2 3
-     * 4 5 6
-     * 7 8 9
-     * so w1 is the top left wall tile.
-    */
-    Tile w1 = {TileType::WALL, TileStatus::NOVAL, {0, 1, 16, 16}}; 
-    Tile w2 = {TileType::WALL, TileStatus::NOVAL, {1, 1, 16, 16}}; 
-    Tile w3 = {TileType::WALL, TileStatus::NOVAL, {2, 1, 16, 16}}; 
-    Tile w4 = {TileType::WALL, TileStatus::NOVAL, {0, 2, 16, 16}}; 
-    Tile w5 = {TileType::WALL, TileStatus::NOVAL, {1, 2, 16, 16}}; 
-    Tile w6 = {TileType::WALL, TileStatus::NOVAL, {2, 2, 16, 16}}; 
-    Tile w7 = {TileType::WALL, TileStatus::NOVAL, {0, 3, 16, 16}}; 
-    Tile w8 = {TileType::WALL, TileStatus::NOVAL, {1, 3, 16, 16}}; 
-    Tile w9 = {TileType::WALL, TileStatus::NOVAL, {2, 3, 16, 16}};
+    Tile w = {TileType::WALL, TileStatus::NOVAL, {0, 0, 16, 16}}; // wall tile
     _level.allocateTilemap(12, 12);
     _level.setTileset(SpritesheetRegistry::getSpritesheet(SpritesheetID::DEFAULT_TILESET));
     _level.setTileSize(16);
     _level.setPlayerId(_player);
     _level.setTilemap({
-        {e, w8, w8, w8, w8, w8, w8, w8, w8, w8, w8, e},
-        {w6, d, d, d, d, d, d, d, d, d, d, w4},
-        {w6, d, d, d, d, d, d, w1, w2, w3, d, w4},
-        {w6, d, d, d, d, d, d, w4, e, w6, d, w4},
-        {w6, d, d, d, d, d, d, w4, e, w6, d, w4},
-        {w6, d, d, d, d, d, d, w7, w8, w9, d, w4},
-        {w6, d, d, d, d, d, d, d, d, d, d, w4},
-        {w6, d, d, w5, d, d, d, d, d, d, d, w4},
-        {w6, d, d, d, d, d, d, d, d, d, d, w4},
-        {w6, d, d, d, d, d, d, d, d, d, d, w4},
-        {w6, d, d, d, d, d, d, d, d, d, d, w4},
-        {e, w2, w2, w2, w2, w2, w2, w2, w2, w2, w2, e},
+        {e, w, w, w, w, w, w, w, w, w, w, e},
+        {w, d, d, d, d, d, d, d, d, d, d, w},
+        {w, d, d, d, d, d, d, w, w, w, d, w},
+        {w, d, d, d, d, d, d, w, e, w, d, w},
+        {w, d, d, d, d, d, d, w, e, w, d, w},
+        {w, d, d, d, d, d, d, w, w, w, d, w},
+        {w, d, d, d, d, d, d, d, d, d, d, w},
+        {w, d, d, w, d, d, d, d, d, d, d, w},
+        {w, d, d, d, d, d, d, d, d, d, d, w},
+        {w, d, d, d, d, d, d, d, d, d, d, w},
+        {w, d, d, d, d, d, d, d, d, d, d, w},
+        {e, w, w, w, w, w, w, w, w, w, w, e},
     });
 
     // Entity init
+    auto ecs = EntityRegistry::getInstance();
+    ecs->init();
     initSystems();
     initPrefabs();
 
@@ -102,7 +86,7 @@ void GameState::tick(float timescale) {
 
     _inputSystem->update();
 
-    _tileFlipSystem->update(&_level);
+    _tileFlipSystem->update(timescale, &_level);
 
     _collisionSystem->update(timescale, &_level);
 
