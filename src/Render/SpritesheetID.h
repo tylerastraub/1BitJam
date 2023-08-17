@@ -8,6 +8,7 @@ enum class SpritesheetID {
     PLAYER,
     HUD,
     PAINT_METER,
+    SMUDGE,
 };
 
 #endif

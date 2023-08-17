@@ -70,8 +70,10 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/src/Entity/Components/Render/SpritesheetPropertiesComponent.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Core/EntityManager.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Player.cpp
+    ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Smudge.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/DialogueTrigger.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/PrefabSpawnTrigger.cpp
+    ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/NavigationSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/PaintSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/ScriptSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/TileFlipSystem.cpp

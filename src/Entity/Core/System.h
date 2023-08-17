@@ -10,6 +10,7 @@ using Entity = std::uint16_t;
 
 class System {
 public:
+    virtual void onEntityCreated(Entity entity) {};
     virtual void onEntityDelete(Entity entity) {};
 
     std::set<Entity, std::greater<Entity>> _entities;

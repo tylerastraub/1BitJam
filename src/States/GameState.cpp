@@ -13,8 +13,10 @@
 #include "CollisionComponent.h"
 #include "TileFlipComponent.h"
 #include "PainterComponent.h"
+#include "NavigationComponent.h"
 // Prefabs
 #include "Player.h"
+#include "Smudge.h"
 
 #include <chrono>
 
@@ -164,6 +166,7 @@ void GameState::initSystems() {
     
     sig.reset();
     _scriptSystem = ecs->registerSystem<ScriptSystem>();
+    _scriptSystem->_audioPlayer = getAudioPlayer();
     sig.set(ecs->getComponentType<ScriptComponent>(), true);
     ecs->setSystemSignature<ScriptSystem>(sig);
     
@@ -198,10 +201,17 @@ void GameState::initSystems() {
     _paintSystem->_audioPlayer = getAudioPlayer();
     sig.set(ecs->getComponentType<PainterComponent>(), true);
     ecs->setSystemSignature<PaintSystem>(sig);
+    
+    sig.reset();
+    _navigationSystem = ecs->registerSystem<NavigationSystem>();
+    _navigationSystem->setLevel(_level);
+    sig.set(ecs->getComponentType<NavigationComponent>(), true);
+    ecs->setSystemSignature<NavigationSystem>(sig);
 }
 
 void GameState::initPrefabs() {
     auto ecs = EntityRegistry::getInstance();
 
     _player = prefab::Player::create(3, 3);
+    prefab::Smudge::create(6, 6);
 }

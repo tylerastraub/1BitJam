@@ -7,6 +7,7 @@
 #include <cmath>
 
 // TODO: put logic here to check if painting on tile is allowed (namely if there is an enemy there)
+// also move all painting logic from setTileAt to in here
 void PaintSystem::update(float timescale, Level* level) {
     auto ecs = EntityRegistry::getInstance();
     for(auto ent : _entities) {

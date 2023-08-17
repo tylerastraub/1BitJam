@@ -54,6 +54,7 @@ public:
             auto systemSignature = _signatures[type];
             if((entitySignature & systemSignature) == systemSignature) {
                 system->_entities.insert(entity);
+                system->onEntityCreated(entity);
             }
             else {
                 system->_entities.erase(entity);

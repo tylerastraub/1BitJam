@@ -159,6 +159,12 @@ bool Game::loadResources() {
     paintMeter->setTileWidth(8);
     paintMeter->setTileHeight(60);
     SpritesheetRegistry::addSpritesheet(SpritesheetID::PAINT_METER, paintMeter);
+    
+    std::shared_ptr<Spritesheet> smudgeSpritesheet = std::make_shared<Spritesheet>();
+    if(!smudgeSpritesheet->load(_renderer, "res/spritesheet/smudge_spritesheet.png")) return false;
+    smudgeSpritesheet->setTileWidth(16);
+    smudgeSpritesheet->setTileHeight(16);
+    SpritesheetRegistry::addSpritesheet(SpritesheetID::SMUDGE, smudgeSpritesheet);
 
     // Audio
     _audioPlayer = std::make_unique<Audio>();

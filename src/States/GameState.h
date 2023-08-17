@@ -16,6 +16,7 @@
 #include "CollisionSystem.h"
 #include "TileFlipSystem.h"
 #include "PaintSystem.h"
+#include "NavigationSystem.h"
 
 #include <memory>
 
@@ -52,6 +53,7 @@ private:
     std::shared_ptr<CollisionSystem> _collisionSystem = nullptr;
     std::shared_ptr<TileFlipSystem> _tileFlipSystem = nullptr;
     std::shared_ptr<PaintSystem> _paintSystem = nullptr;
+    std::shared_ptr<NavigationSystem> _navigationSystem = nullptr;
 
     strb::vec2 _renderOffset = {0.f, 0.f};
 

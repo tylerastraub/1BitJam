@@ -1,9 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <cstdint>
-
 #include "SpritesheetPropertiesComponent.h"
+
+#include <cstdint>
 
 using Entity = std::uint16_t;
 
