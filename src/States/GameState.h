@@ -17,6 +17,7 @@
 #include "TileFlipSystem.h"
 #include "PaintSystem.h"
 #include "NavigationSystem.h"
+#include "DeathSystem.h"
 
 #include <memory>
 
@@ -54,6 +55,7 @@ private:
     std::shared_ptr<TileFlipSystem> _tileFlipSystem = nullptr;
     std::shared_ptr<PaintSystem> _paintSystem = nullptr;
     std::shared_ptr<NavigationSystem> _navigationSystem = nullptr;
+    std::shared_ptr<DeathSystem> _deathSystem = nullptr;
 
     strb::vec2 _renderOffset = {0.f, 0.f};
 

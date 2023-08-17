@@ -22,6 +22,7 @@ void RenderSystem::render(SDL_Renderer* renderer, int renderXOffset, int renderY
     SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0xFF, 0xFF);
     for(auto ent : _entities) {
         auto& renderComponent = ecs->getComponent<RenderComponent>(ent);
+        if(renderComponent.flicker && SDL_GetTicks() % 3 != 0) continue;
         auto& transform = ecs->getComponent<TransformComponent>(ent);
         renderComponent.renderQuad.x = transform.position.x * RENDER_TILE_SIZE + renderComponent.renderQuadOffset.x;
         renderComponent.renderQuad.y = transform.position.y * RENDER_TILE_SIZE + renderComponent.renderQuadOffset.y;

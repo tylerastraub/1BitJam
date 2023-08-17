@@ -14,6 +14,7 @@
 #include "TileFlipComponent.h"
 #include "PainterComponent.h"
 #include "NavigationComponent.h"
+#include "HealthComponent.h"
 // Prefabs
 #include "Player.h"
 #include "Smudge.h"
@@ -85,6 +86,8 @@ void GameState::tick(float timescale) {
     auto ecs = EntityRegistry::getInstance();
 
     _scriptSystem->update(timescale);
+
+    _deathSystem->update(timescale);
 
     _inputSystem->update();
 
@@ -204,9 +207,14 @@ void GameState::initSystems() {
     
     sig.reset();
     _navigationSystem = ecs->registerSystem<NavigationSystem>();
-    _navigationSystem->setLevel(_level);
+    _navigationSystem->setLevel(&_level);
     sig.set(ecs->getComponentType<NavigationComponent>(), true);
     ecs->setSystemSignature<NavigationSystem>(sig);
+    
+    sig.reset();
+    _deathSystem = ecs->registerSystem<DeathSystem>();
+    sig.set(ecs->getComponentType<HealthComponent>(), true);
+    ecs->setSystemSignature<DeathSystem>(sig);
 }
 
 void GameState::initPrefabs() {

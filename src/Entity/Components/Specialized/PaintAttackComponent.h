@@ -4,6 +4,7 @@
 struct PaintAttackComponent {
     int msSinceLastPaintAttack = 500;
     int msCantActAfterPaintAttack = 300;
+    bool attacking = false;
 };
 
 #endif

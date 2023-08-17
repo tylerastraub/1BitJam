@@ -9,12 +9,13 @@ public:
     NavigationSystem() = default;
     ~NavigationSystem() = default;
 
-    void setLevel(Level level);
+    void setLevel(Level* level);
 
     void onEntityCreated(Entity entity) override;
+    void onEntityDelete(Entity entity) override;
 
 private:
-    Level _level;
+    Level* _level;
 
 };
 

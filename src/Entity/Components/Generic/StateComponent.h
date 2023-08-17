@@ -6,6 +6,7 @@ enum class EntityState {
     IDLE,
     MOVING,
     PAINTING,
+    DEAD,
 };
 
 struct StateComponent {

@@ -2,6 +2,7 @@
 #include "EntityRegistry.h"
 #include "TransformComponent.h"
 #include "PhysicsComponent.h"
+#include "HealthComponent.h"
 
 #include <iostream>
 #include <algorithm>
@@ -9,7 +10,13 @@
 void PhysicsSystem::update(float timescale) {
     auto ecs = EntityRegistry::getInstance();
     for(auto ent : _entities) {
+        auto& health = ecs->getComponent<HealthComponent>(ent);
         auto& physics = ecs->getComponent<PhysicsComponent>(ent);
+        if(health.points < 1) {
+            physics.velocity = {0.f, 0.f};
+            return;
+        }
+
         auto& transform = ecs->getComponent<TransformComponent>(ent);
 
         transform.lastPosition = transform.position; // always update this since last position is based on tile position previous turn

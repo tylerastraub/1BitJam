@@ -20,6 +20,7 @@ struct Tile {
     TileType type = TileType::NOVAL;
     TileStatus status = TileStatus::NOVAL;
     SDL_Rect spritesheetRect = {0, 0, 0, 0};
+    int entityOnTile = -1;
 };
 
 #endif

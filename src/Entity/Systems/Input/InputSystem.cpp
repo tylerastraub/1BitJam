@@ -43,7 +43,7 @@ void InputSystem::update() {
             _inputRequested = true;
             if(transform.goalPosition == transform.position) {
                 if(!tileFlip.isLocked) {
-                    transform.goalPosition.x = transform.position.x - 1;   
+                    transform.goalPosition.x = transform.position.x - 1;
                 }
                 dir.direction = Direction::WEST;
             }
@@ -89,6 +89,7 @@ void InputSystem::update() {
             auto& paintAttack = ecs->getComponent<PaintAttackComponent>(ent);
             if(paintAttack.msSinceLastPaintAttack > paintAttack.msCantActAfterPaintAttack) {
                 paintAttack.msSinceLastPaintAttack = 0;
+                paintAttack.attacking = true;
                 strb::vec2 offset = {0.f, 0.f};
                 switch(dir.direction) {
                     case Direction::NORTH:

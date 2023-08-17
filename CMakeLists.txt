@@ -73,6 +73,7 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Smudge.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/DialogueTrigger.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/PrefabSpawnTrigger.cpp
+    ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/DeathSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/NavigationSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/PaintSystem.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/ScriptSystem.cpp

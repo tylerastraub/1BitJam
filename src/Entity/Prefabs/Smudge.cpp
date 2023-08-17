@@ -14,6 +14,7 @@
 #include "PainterComponent.h"
 #include "PaintAttackComponent.h"
 #include "NavigationComponent.h"
+#include "HealthComponent.h"
 
 #include <cmath>
 
@@ -27,11 +28,16 @@ namespace {
 
         void update(Entity owner, float timescale, Audio* audio) override {
             auto ecs = EntityRegistry::getInstance();
+            
+            auto& health = ecs->getComponent<HealthComponent>(owner);
+            if(health.points < 1) return;
+
             auto& transform = ecs->getComponent<TransformComponent>(owner);
             auto& painter = ecs->getComponent<PainterComponent>(owner);
             auto& paintAttack = ecs->getComponent<PaintAttackComponent>(owner);
             auto& navigation = ecs->getComponent<NavigationComponent>(owner);
             auto& direction = ecs->getComponent<DirectionComponent>(owner);
+            auto& state = ecs->getComponent<StateComponent>(owner);
 
             _actionTimerCounter += timescale * 1000;
             painter.paintPos = {std::roundf(transform.position.x), std::roundf(transform.position.y)};
@@ -76,11 +82,19 @@ namespace {
                     }
                 }
             }
+
+            if(ecs->getComponent<HealthComponent>(owner).points > 0) {
+                state.state = EntityState::IDLE;
+            }
+            else {
+                state.state = EntityState::DEAD;
+                direction.direction = Direction::SOUTH;
+            }
         }
 
     private:
-        const int MIN_ACTION_TIMER = 3000;
-        const int MAX_ACTION_TIMER = 10000;
+        const int MIN_ACTION_TIMER = 1000;
+        const int MAX_ACTION_TIMER = 5000;
         int _actionTimerCounter = 0;
         int _actionTimerLimit = 0;
 
@@ -105,6 +119,7 @@ namespace prefab {
         ecs->addComponent<PainterComponent>(ent, PainterComponent{true, TileStatus::DARK});
         ecs->addComponent<PaintAttackComponent>(ent, PaintAttackComponent{});
         ecs->addComponent<NavigationComponent>(ent, NavigationComponent{});
+        ecs->addComponent<HealthComponent>(ent, HealthComponent{1});
 
         RenderComponent render;
         render.renderQuad = {0, 0, 16, 16};
@@ -175,6 +190,19 @@ namespace prefab {
             {-1, -1} // center
         };
         propsComp.addSpritesheetProperties(EntityState::IDLE, Direction::NORTH, idleNorth);
+
+        SpritesheetProperties deadSouth = {
+            0, // xTileIndex
+            3, // yTileIndex
+            false, // isAnimated
+            false, // isLooped
+            1, // numOfFrames
+            1, // msBetweenFrames
+            SDL_FLIP_NONE, // flip
+            0.0, // angle
+            {-1, -1} // center
+        };
+        propsComp.addSpritesheetProperties(EntityState::DEAD, Direction::SOUTH, deadSouth);
 
         return propsComp;
     }
