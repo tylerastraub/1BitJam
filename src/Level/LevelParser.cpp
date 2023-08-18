@@ -37,6 +37,16 @@ Level LevelParser::parseLevelFromTmx(std::string filePath, SpritesheetID sprites
             tilesetSize.y = tileset.getImageSize().y;
         }
 
+        // Custom map properties
+        for(auto prop : map.getProperties()) {
+            if(prop.getName() == "nextLevel" && prop.getType() == tmx::Property::Type::String) {
+                level.setNextLevel(prop.getStringValue());
+            }
+            else if(prop.getName() == "paintGoalPercent" && prop.getType() == tmx::Property::Type::Float) {
+                level.setPaintGoalPercent(prop.getFloatValue());
+            }
+        }
+
         // Map layers
         for(const auto& layer : layers) {
             // Object layer
@@ -149,9 +159,11 @@ Level LevelParser::parseLevelFromTmx(std::string filePath, SpritesheetID sprites
                         }
                         else if(object.getClass() == "stairs_up") {
                             tile.type = TileType::STAIRS_UP;
+                            tile.status = TileStatus::UNLOCKED;
                         }
                         else if(object.getClass() == "stairs_down") {
                             tile.type = TileType::STAIRS_DOWN;
+                            tile.status = TileStatus::LOCKED;
                         }
                         else if(object.getClass() == "bonus") {
                             tile.type = TileType::BONUS;

@@ -120,6 +120,19 @@ void Level::setTileAt(int x, int y, Tile tile) {
         }
         // then actually set the tile
         _tilemap[y][x] = tile;
+
+        if(isPaintGoalMet()) {
+            for(size_t x = 0; x < _tilemapWidth; ++x) {
+                for(size_t y = 0; y < _tilemapHeight; ++y) {
+                    Tile stairs = getTileAt(x, y);
+                    if(stairs.type == TileType::STAIRS_DOWN && stairs.status == TileStatus::LOCKED) {
+                        stairs.status = TileStatus::UNLOCKED;
+                        stairs.spritesheetRect = {5, 4, 16, 16};
+                        _tilemap[y][x] = stairs;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -133,6 +146,14 @@ void Level::setPlayerId(Entity player) {
 
 void Level::addPrefab(Entity entity) {
     _prefabs.push_back(entity);
+}
+
+void Level::setPaintGoalPercent(float paintGoalPercent) {
+    _paintGoalPercent = paintGoalPercent;
+}
+
+void Level::setNextLevel(std::string nextLevel) {
+    _nextLevel = nextLevel;
 }
 
 Tile Level::getTileAt(int x, int y) {
@@ -168,4 +189,16 @@ std::pair<int, int> Level::getPaintedTileStatus() {
 
 std::pair<int, int> Level::getBonusTileStatus() {
     return std::make_pair(_numOfPaintedBonusTiles, _numOfPaintableBonusTiles);
+}
+
+float Level::getPaintGoalPercent() {
+    return _paintGoalPercent;
+}
+
+std::string Level::getNextLevel() {
+    return _nextLevel;
+}
+
+bool Level::isPaintGoalMet() {
+    return _numOfPaintedTiles >= _numOfPaintableTiles * _paintGoalPercent;
 }

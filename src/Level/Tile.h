@@ -17,6 +17,8 @@ enum class TileStatus {
     NOVAL = -1,
     DARK,
     LIGHT,
+    LOCKED,
+    UNLOCKED,
 };
 
 struct Tile {

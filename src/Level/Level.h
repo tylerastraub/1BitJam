@@ -29,6 +29,8 @@ public:
     void setTileset(Spritesheet* tileset);
     void setPlayerId(Entity player);
     void addPrefab(Entity entity);
+    void setPaintGoalPercent(float paintGoalPercent);
+    void setNextLevel(std::string nextLevel);
 
     Tile getTileAt(int x, int y);
     int getTileSize();
@@ -44,6 +46,9 @@ public:
      * Returns the number of painted bonus tiles (pair.first) and how many bonus tiles can be painted in total (pair.second).
     */
     std::pair<int, int> getBonusTileStatus();
+    float getPaintGoalPercent();
+    std::string getNextLevel();
+    bool isPaintGoalMet();
 
 private:
 
@@ -61,6 +66,9 @@ private:
     int _numOfPaintableTiles = 0;
     int _numOfPaintedBonusTiles = 0;
     int _numOfPaintableBonusTiles = 0;
+
+    float _paintGoalPercent = 1.f; // percent of tiles needed to paint to advance to next level
+    std::string _nextLevel = "";
 
 };
 

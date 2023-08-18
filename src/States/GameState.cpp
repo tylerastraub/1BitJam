@@ -28,9 +28,9 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 /**
  * TODO:
  * - Figure out bonus tile purpose
- * - Add goal on paint meter
  * - Add stairs functionality
- *     - Maybe add score screen after each level? Show total tiles painted, enemies killed, bonus tiles, etc.
+ * - Add score screen after each level
+ *     - Show total tiles painted, enemies killed, bonus tiles, etc.
  * - Add more enemies/items
  *     - Teleporting enemy that shoots out black paint in AOE around it after teleport
  *         - Teleports on hit ?
@@ -125,6 +125,10 @@ void GameState::render() {
     if(percentPaintedHeight < 1) percentPaintedHeight = 1;
     SDL_Rect percentPaintedProgress = {3, paintMeterY + 3 + PERCENT_PAINTED_MAX_HEIGHT - percentPaintedHeight, 2, percentPaintedHeight};
     SDL_RenderFillRect(getRenderer(), &percentPaintedProgress);
+    // Paint goal render
+    int paintGoalY = paintMeterY + 3 + PERCENT_PAINTED_MAX_HEIGHT * (1.f - _level.getPaintGoalPercent());
+    SDL_Rect paintGoalLine = {2, paintGoalY, 4, 1};
+    SDL_RenderFillRect(getRenderer(), &paintGoalLine);
 
     SDL_RenderPresent(getRenderer());
 }
