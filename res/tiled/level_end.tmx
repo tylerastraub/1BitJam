@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="808">
+ <properties>
+  <property name="nextLevel" value=""/>
+  <property name="paintGoalPercent" type="float" value="0.85"/>
+ </properties>
  <tileset firstgid="1" source="default_tileset.tsx"/>
  <layer id="1" name="Tile Layer 1" width="40" height="20">
   <data encoding="csv">
@@ -829,10 +833,6 @@
  </objectgroup>
  <objectgroup id="2" name="objects">
   <object id="523" name="player" x="64" y="48">
-   <properties>
-    <property name="nextLevel" value=""/>
-    <property name="paintGoalPercent" type="float" value="0.9"/>
-   </properties>
    <point/>
   </object>
   <object id="524" name="scrubber" x="256" y="16">

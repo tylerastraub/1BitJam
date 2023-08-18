@@ -6,6 +6,7 @@
 #include "PlayerComponent.h"
 
 #include <iostream>
+#include <cmath>
 
 void CollisionSystem::update(float timescale, Level* level) {
     auto ecs = EntityRegistry::getInstance();
@@ -70,7 +71,8 @@ void CollisionSystem::update(float timescale, Level* level) {
         }
 
         // Check what tile entity is stationary on and if we should act on that
-        if(transform.position == transform.goalPosition) {
+        if(transform.position.x == std::floor(transform.position.x) &&
+           transform.position.y == std::floor(transform.position.y)) {
             if(ecs->hasComponent<PlayerComponent>(ent)) {
                 tile = level->getTileAt(transform.position.x, transform.position.y);
                 if(tile.type == TileType::STAIRS_DOWN && tile.status == TileStatus::UNLOCKED) {

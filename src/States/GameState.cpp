@@ -27,8 +27,9 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 
 /**
  * TODO:
- * - Fix bug where player can walk over stairs by holding down move key
  * - Figure out bonus tile purpose
+ * - Add text for when goal is met, 100% of tiles painted, and bonus 100%
+ * - Fix bug where inputs are carrying over between states (and inputPressed is getting read even though input remains down)
  * - Add more enemies/items
  *     - Teleporting enemy that shoots out black paint in AOE around it after teleport
  *         - Teleports on hit ?

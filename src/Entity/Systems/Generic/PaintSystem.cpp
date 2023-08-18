@@ -19,6 +19,7 @@ void PaintSystem::update(float timescale, Level* level) {
             painter.requestsPaint = false;
             if(tile.entityOnTile < 0 || tile.entityOnTile == ent) {
                 tile.status = painter.paintColor;
+                if(painter.paintColor == TileStatus::DARK) tile.spritesheetRect = {0, 0, 16, 16};
                 level->setTileAt(painter.paintPos.x, painter.paintPos.y, tile);
                 level->isPaintGoalMet();
                 // if(tile.type == TileType::BONUS) _audioPlayer->playAudio(ent, AudioSound::PAINT_BONUS, 0.5f);
