@@ -4,6 +4,7 @@
 #include "Level.h"
 
 #include <bitset>
+#include <iostream>
 
 struct TileSpritesheetHelper {
 public:
@@ -18,7 +19,16 @@ public:
                 }
                 break;
             }
+            case TileType::BONUS: {
+                if(tile.status == TileStatus::LIGHT) {
+                    std::bitset<4> bitmask = getBitmaskValueForTile(level, tilePos);
+                    tile.spritesheetRect = getLightBonusSpritesheetRect(bitmask);
+                    level->setTileAt(tilePos.x, tilePos.y, tile);
+                }
+                break;
+            }
             case TileType::WALL: {
+                std::cout << "wall changing - BAD!!!" << std::endl;
                 std::bitset<4> bitmask = getBitmaskValueForTile(level, tilePos);
                 tile.spritesheetRect = getWallSpritesheetRect(bitmask);
                 level->setTileAt(tilePos.x, tilePos.y, tile);
@@ -162,6 +172,74 @@ private:
         else if(bitmask == 0b1111) {
             // tiles on all sides
             return {0, 0, 16, 16};
+        }
+        return {0, 0, 16, 16};
+    }
+    
+    static SDL_Rect getLightBonusSpritesheetRect(std::bitset<4> bitmask) {
+        if(bitmask == 0b0000) {
+            // no surrounding tiles
+            return {2, 0, 16, 16};
+        }
+        else if(bitmask == 0b0001) {
+            // tile to north
+            return {6, 3, 16, 16};
+        }
+        else if(bitmask == 0b0010) {
+            // tile to east
+            return {7, 2, 16, 16};
+        }
+        else if(bitmask == 0b0011) {
+            // tiles to north and east
+            return {6, 1, 16, 16};
+        }
+        else if(bitmask == 0b0100) {
+            // tile to south
+            return {6, 2, 16, 16};
+        }
+        else if(bitmask == 0b0101) {
+            // tiles to north and south
+            return {5, 2, 16, 16};
+        }
+        else if(bitmask == 0b0110) {
+            // tiles to south and east
+            return {6, 0, 16, 16};
+        }
+        else if(bitmask == 0b0111) {
+            // tiles to north, south, and east
+            return {5, 2, 16, 16};
+        }
+        else if(bitmask == 0b1000) {
+            // tile to west
+            return {7, 3, 16, 16};
+        }
+        else if(bitmask == 0b1001) {
+            // tiles to north and west
+            return {7, 1, 16, 16};
+        }
+        else if(bitmask == 0b1010) {
+            // tiles to east and west
+            return {5, 2, 16, 16};
+        }
+        else if(bitmask == 0b1011) {
+            // tiles to north, east, and west
+            return {5, 2, 16, 16};
+        }
+        else if(bitmask == 0b1100) {
+            // tiles to south and west
+            return {7, 0, 16, 16};
+        }
+        else if(bitmask == 0b1101) {
+            // tiles to north, south, and west
+            return {5, 2, 16, 16};
+        }
+        else if(bitmask == 0b1110) {
+            // tiles to south, east, and west
+            return {5, 2, 16, 16};
+        }
+        else if(bitmask == 0b1111) {
+            // tiles on all sides
+            return {5, 2, 16, 16};
         }
         return {0, 0, 16, 16};
     }

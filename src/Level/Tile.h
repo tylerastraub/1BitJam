@@ -8,14 +8,15 @@ enum class TileType {
     GROUND,
     WALL,
     HAZARD,
-    STAIRS,
+    STAIRS_UP,
+    STAIRS_DOWN,
+    BONUS,
 };
 
 enum class TileStatus {
     NOVAL = -1,
     DARK,
     LIGHT,
-    BONUS,
 };
 
 struct Tile {

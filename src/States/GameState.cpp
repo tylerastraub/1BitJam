@@ -27,8 +27,7 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 
 /**
  * TODO:
- * - Rename level1 to something else (way too big for 1st level)
- * - Add bonus tile support
+ * - Figure out bonus tile purpose
  * - Add goal on paint meter
  * - Add stairs functionality
  *     - Maybe add score screen after each level? Show total tiles painted, enemies killed, bonus tiles, etc.
@@ -36,6 +35,7 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
  *     - Teleporting enemy that shoots out black paint in AOE around it after teleport
  *         - Teleports on hit ?
  *     - Paint emitter that shoots out paint when you hit it
+ *     - Smudge spawner
  * - Add sounds, MUSIC???
  * - Add menu
  * - Add tutorial level
@@ -101,6 +101,8 @@ void GameState::tick(float timescale) {
     // Paint
     std::pair<int, int> paintStatus = _level.getPaintedTileStatus();
     if(paintStatus.second != 0) _paintPercent = static_cast<float>(paintStatus.first) / static_cast<float>(paintStatus.second);
+    std::pair<int, int> bonusStatus = _level.getBonusTileStatus();
+    std::cout << "Painted tiles: " << paintStatus.first << "/" << paintStatus.second << " - Bonus tiles: " << bonusStatus.first << "/" << bonusStatus.second << std::endl;
 }
 
 void GameState::render() {

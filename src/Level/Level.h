@@ -40,6 +40,10 @@ public:
      * Returns the number of painted tiles (pair.first) and how many tiles can be painted in total (pair.second).
     */
     std::pair<int, int> getPaintedTileStatus();
+    /**
+     * Returns the number of painted bonus tiles (pair.first) and how many bonus tiles can be painted in total (pair.second).
+    */
+    std::pair<int, int> getBonusTileStatus();
 
 private:
 
@@ -55,6 +59,8 @@ private:
 
     int _numOfPaintedTiles = 0;
     int _numOfPaintableTiles = 0;
+    int _numOfPaintedBonusTiles = 0;
+    int _numOfPaintableBonusTiles = 0;
 
 };
 

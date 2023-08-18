@@ -147,12 +147,15 @@ Level LevelParser::parseLevelFromTmx(std::string filePath, SpritesheetID sprites
                         else if(object.getClass() == "hazard") {
                             tile.type = TileType::HAZARD;
                         }
-                        else if(object.getClass() == "stairs") {
-                            tile.type = TileType::STAIRS;
+                        else if(object.getClass() == "stairs_up") {
+                            tile.type = TileType::STAIRS_UP;
+                        }
+                        else if(object.getClass() == "stairs_down") {
+                            tile.type = TileType::STAIRS_DOWN;
                         }
                         else if(object.getClass() == "bonus") {
-                            tile.type = TileType::GROUND;
-                            tile.status = TileStatus::BONUS;
+                            tile.type = TileType::BONUS;
+                            tile.status = TileStatus::DARK;
                         }
                         level.setTileAt(xPos, yPos, tile);
                     }
