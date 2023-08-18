@@ -124,6 +124,7 @@ void Text::setString(std::string s) {
         else if(c == '\n') {
             if(!currentWord.text.empty()) _words.push_back(currentWord);
             _width += currentWord.w;
+            currentWord = Word();
             currentWord.text = "\n";
             _words.push_back(currentWord);
             currentWord = Word();

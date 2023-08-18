@@ -32,11 +32,15 @@ void Timer::setTimerResetDefault(int ms) {
     _timerResetDefault = ms;
 }
 
+void Timer::setTimerAutoReset(bool autoReset) {
+    _autoTimerReset = autoReset;
+}
+
 void Timer::changeToTimer() {
     _countingCoefficient = -1;
 }
 
-void Timer::chagneToStopwatch() {
+void Timer::changeToStopwatch() {
     _countingCoefficient = 1;
 }
 
@@ -49,9 +53,11 @@ int Timer::getMostRecentSecond() {
 }
 
 std::string Timer::getTimerAsString() {
-    int seconds = _timer / 1000;
-    int ms = _timer % 100 / 10;
-    return std::to_string(seconds) + "." + std::to_string(ms);
+    int min = _timer / 60000;
+    int tempTimer = _timer % 60000;
+    int seconds = tempTimer / 1000;
+    if(seconds < 10) return std::to_string(min) + ":0" + std::to_string(seconds);
+    else return std::to_string(min) + ":" + std::to_string(seconds);
 }
 
 bool Timer::isZero() {

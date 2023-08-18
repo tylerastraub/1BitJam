@@ -829,6 +829,10 @@
  </objectgroup>
  <objectgroup id="2" name="objects">
   <object id="523" name="player" x="64" y="48">
+   <properties>
+    <property name="nextLevel" value=""/>
+    <property name="paintGoalPercent" type="float" value="0.9"/>
+   </properties>
    <point/>
   </object>
   <object id="524" name="scrubber" x="256" y="16">

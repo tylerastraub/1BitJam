@@ -2,7 +2,7 @@
 #define PAINT_ATTACK_COMPONENT_H
 
 struct PaintAttackComponent {
-    int msSinceLastPaintAttack = 500;
+    int msSinceLastPaintAttack = 299;
     int msCantActAfterPaintAttack = 300;
     bool attacking = false;
     bool wasAttackingLastTick = false;

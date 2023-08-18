@@ -18,7 +18,7 @@ public:
     void setTimerResetDefault(int ms);
     void setTimerAutoReset(bool autoReset);
     void changeToTimer();
-    void chagneToStopwatch();
+    void changeToStopwatch();
 
     int getTimer();
     int getMostRecentSecond();

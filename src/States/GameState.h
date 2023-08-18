@@ -7,6 +7,7 @@
 #include "Controller.h"
 #include "Level.h"
 #include "Timer.h"
+#include "DialogueBox.h"
 // Systems
 #include "InputSystem.h"
 #include "RenderSystem.h"
@@ -43,6 +44,8 @@ private:
     std::unique_ptr<Controller> _controller = nullptr;
 
     Level _level;
+
+    DialogueBox _dialogueBox;
 
     Entity _player;
 

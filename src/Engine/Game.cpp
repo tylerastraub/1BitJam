@@ -87,6 +87,7 @@ bool Game::init() {
                         }
                         _currentState->setAudioPlayer(_audioPlayer.get());
                         _currentState->setSettings(_settings.get());
+                        _currentState->setLevelFilePath("res/tiled/level1.tmx");
                         _currentState->init();
                         SDL_ShowCursor(SDL_DISABLE);
                         windowCreatedSuccessfully = true;
@@ -138,8 +139,8 @@ bool Game::loadResources() {
 
     std::shared_ptr<Spritesheet> dialogueSpritesheet = std::make_shared<Spritesheet>();
     if(!dialogueSpritesheet->load(_renderer, "res/spritesheet/dialogue_box.png")) return false;
-    dialogueSpritesheet->setTileWidth(320);
-    dialogueSpritesheet->setTileHeight(32);
+    dialogueSpritesheet->setTileWidth(100);
+    dialogueSpritesheet->setTileHeight(80);
     SpritesheetRegistry::addSpritesheet(SpritesheetID::DIALOGUE_BOX, dialogueSpritesheet);
     
     std::shared_ptr<Spritesheet> playerSpritesheet = std::make_shared<Spritesheet>();

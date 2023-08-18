@@ -33,6 +33,10 @@ void State::completeSettingsChange() {
     _settingsChanged = false;
 }
 
+void State::setLevelFilePath(std::string levelFilePath) {
+    _levelFilePath = levelFilePath;
+}
+
 strb::vec2 State::getGameSize() {
     return _gameSize;
 }
@@ -63,4 +67,8 @@ Settings* State::getSettings() {
 
 bool State::settingsChanged() {
     return _settingsChanged;
+}
+
+std::string State::getLevelFilePath() {
+    return _levelFilePath;
 }

@@ -5,6 +5,7 @@
 #include "Spritesheet.h"
 #include "vec2.h"
 #include "LightMap.h"
+#include "Timer.h"
 
 #include <vector>
 #include <cstdint>
@@ -31,6 +32,7 @@ public:
     void addPrefab(Entity entity);
     void setPaintGoalPercent(float paintGoalPercent);
     void setNextLevel(std::string nextLevel);
+    void setIsLevelComplete(bool isLevelComplete);
 
     Tile getTileAt(int x, int y);
     int getTileSize();
@@ -48,7 +50,9 @@ public:
     std::pair<int, int> getBonusTileStatus();
     float getPaintGoalPercent();
     std::string getNextLevel();
+    std::string getLevelResults(Timer timer, int enemiesDefeated, std::string actionInputString);
     bool isPaintGoalMet();
+    bool isLevelComplete();
 
 private:
 
@@ -69,6 +73,7 @@ private:
 
     float _paintGoalPercent = 1.f; // percent of tiles needed to paint to advance to next level
     std::string _nextLevel = "";
+    bool _isLevelComplete = false;
 
 };
 

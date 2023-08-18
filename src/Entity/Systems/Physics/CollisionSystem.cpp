@@ -1,8 +1,9 @@
 #include "CollisionSystem.h"
+#include "EntityRegistry.h"
 #include "CollisionComponent.h"
 #include "PhysicsComponent.h"
 #include "TransformComponent.h"
-#include "EntityRegistry.h"
+#include "PlayerComponent.h"
 
 #include <iostream>
 
@@ -12,10 +13,11 @@ void CollisionSystem::update(float timescale, Level* level) {
         auto& collision = ecs->getComponent<CollisionComponent>(ent);
         auto& physics = ecs->getComponent<PhysicsComponent>(ent);
         auto& transform = ecs->getComponent<TransformComponent>(ent);
+        Tile tile;
 
         // X collision check
         if(transform.goalPosition.x != transform.position.x) {
-            Tile tile = level->getTileAt(transform.goalPosition.x, transform.goalPosition.y);
+            tile = level->getTileAt(transform.goalPosition.x, transform.goalPosition.y);
             if(tile.type == TileType::WALL || (tile.entityOnTile != ent && tile.entityOnTile >= 0)) {
                 if(transform.position.x > transform.goalPosition.x) {
                     collision.collidingLeft = true;
@@ -35,7 +37,7 @@ void CollisionSystem::update(float timescale, Level* level) {
         }
         // Y collision check
         if(transform.goalPosition.y != transform.position.y) {
-            Tile tile = level->getTileAt(transform.goalPosition.x, transform.goalPosition.y);
+            tile = level->getTileAt(transform.goalPosition.x, transform.goalPosition.y);
             if(tile.type == TileType::WALL || (tile.entityOnTile != ent && tile.entityOnTile >= 0)) {
                 if(transform.position.y > transform.goalPosition.y) {
                     collision.collidingUp = true;
@@ -55,7 +57,7 @@ void CollisionSystem::update(float timescale, Level* level) {
         }
 
         // keep track of which tiles have entities on them
-        Tile tile = level->getTileAt(transform.lastPosition.x, transform.lastPosition.y);
+        tile = level->getTileAt(transform.lastPosition.x, transform.lastPosition.y);
         tile.entityOnTile = -1;
         level->setTileAt(transform.lastPosition.x, transform.lastPosition.y, tile);
         tile = level->getTileAt(transform.position.x, transform.position.y);
@@ -65,6 +67,16 @@ void CollisionSystem::update(float timescale, Level* level) {
             tile = level->getTileAt(transform.goalPosition.x, transform.goalPosition.y);
             tile.entityOnTile = ent;
             level->setTileAt(transform.goalPosition.x, transform.goalPosition.y, tile);
+        }
+
+        // Check what tile entity is stationary on and if we should act on that
+        if(transform.position == transform.goalPosition) {
+            if(ecs->hasComponent<PlayerComponent>(ent)) {
+                tile = level->getTileAt(transform.position.x, transform.position.y);
+                if(tile.type == TileType::STAIRS_DOWN && tile.status == TileStatus::UNLOCKED) {
+                    level->setIsLevelComplete(true);
+                }
+            }
         }
     }
 }

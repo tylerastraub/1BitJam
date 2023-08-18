@@ -27,10 +27,10 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 
 /**
  * TODO:
+ * - Fix bug where right after entering new level, walking into tile you immediately paint attacked causes player to freeze
+ *     - Check out places where position != goalPosition
+ * - Fix bug where player can walk over stairs by holding down move key
  * - Figure out bonus tile purpose
- * - Add stairs functionality
- * - Add score screen after each level
- *     - Show total tiles painted, enemies killed, bonus tiles, etc.
  * - Add more enemies/items
  *     - Teleporting enemy that shoots out black paint in AOE around it after teleport
  *         - Teleports on hit ?
@@ -46,13 +46,13 @@ bool GameState::init() {
     _keyboard = std::make_unique<Keyboard>();
     _mouse = std::make_unique<Mouse>(getRenderScale(), getRenderScale());
     _controller = std::make_unique<Controller>();
-    
+
     // ECS init
     auto ecs = EntityRegistry::getInstance();
     ecs->init();
 
     // Level/Systems init
-    _level = LevelParser::parseLevelFromTmx("res/tiled/level1.tmx", SpritesheetID::DEFAULT_TILESET);
+    _level = LevelParser::parseLevelFromTmx(getLevelFilePath(), SpritesheetID::DEFAULT_TILESET);
     _level.updatePaintTiles();
     initSystems();
     _level.spawnPrefabs();
@@ -67,11 +67,47 @@ bool GameState::init() {
     _cameraSystem->update(1.f);
     _renderOffset = {_cameraSystem->getCurrentCameraOffset().x, _cameraSystem->getCurrentCameraOffset().x};
 
+    // Dialogue box
+    _dialogueBox.setAudio(getAudioPlayer());
+    _dialogueBox.setIsEnabled(false);
+    _dialogueBox.setReadSpeed(ReadSpeed::SLOW);
+    _dialogueBox.setText(getText(TextSize::TINY));
+    _dialogueBox.reset();
+
+    // Timer
+    _timer.changeToStopwatch();
+    _timer.setTimer(0);
+    _timer.reset();
+
     return true;
 }
 
 void GameState::tick(float timescale) {
     auto ecs = EntityRegistry::getInstance();
+
+    if(_level.isLevelComplete()) {
+        if(_dialogueBox.getTimeActive() == 0) {
+            _dialogueBox.setString(_level.getLevelResults(_timer, _deathSystem->getNumOfDeaths(), getSettings()->getStringKeyboardControlForInputEvent(InputEvent::ACTION)));
+            _dialogueBox.setIsEnabled(true);
+        }
+        if(_keyboard->isKeyPressed(getSettings()->getScancode(InputEvent::ACTION))) {
+            if(_dialogueBox.isTextFullyDisplayed()) {
+                _dialogueBox.advanceDialogue();
+            }
+            else {
+                _dialogueBox.setTextFullyDisplayed(true);
+            }
+        }
+        if(!_dialogueBox.isEnabled()) {
+            GameState* nextState = new GameState();
+            nextState->setLevelFilePath(_level.getNextLevel());
+            setNextState(nextState);
+        }
+        _dialogueBox.tick(timescale);
+        _keyboard->updateInputs();
+        _controller->updateInputs();
+        return;
+    }
 
     _scriptSystem->update(timescale);
 
@@ -102,7 +138,10 @@ void GameState::tick(float timescale) {
     std::pair<int, int> paintStatus = _level.getPaintedTileStatus();
     if(paintStatus.second != 0) _paintPercent = static_cast<float>(paintStatus.first) / static_cast<float>(paintStatus.second);
     std::pair<int, int> bonusStatus = _level.getBonusTileStatus();
-    std::cout << "Painted tiles: " << paintStatus.first << "/" << paintStatus.second << " - Bonus tiles: " << bonusStatus.first << "/" << bonusStatus.second << std::endl;
+    // std::cout << "Painted tiles: " << paintStatus.first << "/" << paintStatus.second << " - Bonus tiles: " << bonusStatus.first << "/" << bonusStatus.second << std::endl;
+
+    // Timer
+    _timer.update(timescale);
 }
 
 void GameState::render() {
@@ -129,6 +168,11 @@ void GameState::render() {
     int paintGoalY = paintMeterY + 3 + PERCENT_PAINTED_MAX_HEIGHT * (1.f - _level.getPaintGoalPercent());
     SDL_Rect paintGoalLine = {2, paintGoalY, 4, 1};
     SDL_RenderFillRect(getRenderer(), &paintGoalLine);
+
+    // Dialogue box
+    if(_dialogueBox.isEnabled()) {
+        _dialogueBox.render(getGameSize().x / 2 - 50, 5);
+    }
 
     SDL_RenderPresent(getRenderer());
 }

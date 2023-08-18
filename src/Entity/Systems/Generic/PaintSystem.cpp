@@ -20,6 +20,7 @@ void PaintSystem::update(float timescale, Level* level) {
             if(tile.entityOnTile < 0 || tile.entityOnTile == ent) {
                 tile.status = painter.paintColor;
                 level->setTileAt(painter.paintPos.x, painter.paintPos.y, tile);
+                level->isPaintGoalMet();
                 // if(tile.type == TileType::BONUS) _audioPlayer->playAudio(ent, AudioSound::PAINT_BONUS, 0.5f);
             }
             if(ecs->hasComponent<PaintAttackComponent>(ent)) {

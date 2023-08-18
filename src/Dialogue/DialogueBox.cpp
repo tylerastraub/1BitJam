@@ -15,9 +15,8 @@ void DialogueBox::tick(float timescale) {
 void DialogueBox::render(int x, int y) {
     _text->setString(_currentString);
     Spritesheet* dialogueBox = SpritesheetRegistry::getSpritesheet(SpritesheetID::DIALOGUE_BOX);
-    int yIndex = (isTextFullyDisplayed()) ? 1 : 0;
-    dialogueBox->setTileIndex(0, yIndex);
-    dialogueBox->render(x, y, dialogueBox->getWidth(), dialogueBox->getHeight() / 2);
+    dialogueBox->setTileIndex(0, 0);
+    dialogueBox->render(x, y, dialogueBox->getWidth(), dialogueBox->getHeight());
 
     if(_textIsFullyDisplayed) {
         _text->setPercentOfTextDisplayed(1.f);

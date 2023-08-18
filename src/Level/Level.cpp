@@ -120,19 +120,6 @@ void Level::setTileAt(int x, int y, Tile tile) {
         }
         // then actually set the tile
         _tilemap[y][x] = tile;
-
-        if(isPaintGoalMet()) {
-            for(size_t x = 0; x < _tilemapWidth; ++x) {
-                for(size_t y = 0; y < _tilemapHeight; ++y) {
-                    Tile stairs = getTileAt(x, y);
-                    if(stairs.type == TileType::STAIRS_DOWN && stairs.status == TileStatus::LOCKED) {
-                        stairs.status = TileStatus::UNLOCKED;
-                        stairs.spritesheetRect = {5, 4, 16, 16};
-                        _tilemap[y][x] = stairs;
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -154,6 +141,10 @@ void Level::setPaintGoalPercent(float paintGoalPercent) {
 
 void Level::setNextLevel(std::string nextLevel) {
     _nextLevel = nextLevel;
+}
+
+void Level::setIsLevelComplete(bool isLevelComplete) {
+    _isLevelComplete = isLevelComplete;
 }
 
 Tile Level::getTileAt(int x, int y) {
@@ -199,6 +190,33 @@ std::string Level::getNextLevel() {
     return _nextLevel;
 }
 
+std::string Level::getLevelResults(Timer timer, int enemiesDefeated, std::string actionInputString) {
+    std::string tilesPainted = "Tiles: " + std::to_string(_numOfPaintedTiles) + "/" + std::to_string(_numOfPaintableTiles) + '\n';
+    std::string bonusTiles = "Bonus: " + std::to_string(_numOfPaintedBonusTiles) + "/" + std::to_string(_numOfPaintableBonusTiles) + '\n';
+    std::string enemies = "Enemies Painted: " + std::to_string(enemiesDefeated) + '\n';
+    std::string timeCompleted = "Time: " + timer.getTimerAsString() + '\n';
+    std::string next = "Press " + actionInputString + " to advance";
+    
+    return "== LEVEL COMPLETE ==\n" + tilesPainted + bonusTiles + enemies + timeCompleted + '\n' + next;
+}
+
 bool Level::isPaintGoalMet() {
-    return _numOfPaintedTiles >= _numOfPaintableTiles * _paintGoalPercent;
+    if(_numOfPaintedTiles >= _numOfPaintableTiles * _paintGoalPercent) {
+        for(size_t x = 0; x < _tilemapWidth; ++x) {
+            for(size_t y = 0; y < _tilemapHeight; ++y) {
+                Tile stairs = getTileAt(x, y);
+                if(stairs.type == TileType::STAIRS_DOWN && stairs.status == TileStatus::LOCKED) {
+                    stairs.status = TileStatus::UNLOCKED;
+                    stairs.spritesheetRect = {5, 4, 16, 16};
+                    _tilemap[y][x] = stairs;
+                }
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool Level::isLevelComplete() {
+    return _isLevelComplete;
 }

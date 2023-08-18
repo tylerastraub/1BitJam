@@ -27,8 +27,13 @@ void DeathSystem::update(float timescale) {
                 if(_entityTimers[ent] > _despawnTime) {
                     ecs->destroyEntity(ent);
                     _entityTimers.erase(ent);
+                    ++_deaths;
                 }
             }
         }
     }
+}
+
+int DeathSystem::getNumOfDeaths() {
+    return _deaths;
 }

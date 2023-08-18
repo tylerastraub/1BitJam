@@ -12,9 +12,12 @@ public:
 
     void update(float timescale);
 
+    int getNumOfDeaths();
+
 private:
     int _despawnTime = 1000;
     std::unordered_map<Entity, int> _entityTimers;
+    int _deaths = 0;
 
 };
 

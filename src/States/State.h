@@ -41,6 +41,7 @@ public:
     void setAudioPlayer(Audio* audioPlayer);
     void setSettings(Settings* settings);
     void completeSettingsChange();
+    void setLevelFilePath(std::string levelFilePath);
     
     strb::vec2 getGameSize();
     State* getNextState();
@@ -50,6 +51,7 @@ public:
     Audio* getAudioPlayer();
     Settings* getSettings();
     bool settingsChanged();
+    std::string getLevelFilePath();
 
 protected:
     bool _settingsChanged = false;
@@ -62,6 +64,7 @@ private:
     std::unordered_map<TextSize, Text*> _text;
     Audio* _audioPlayer = nullptr;
     Settings* _settings = nullptr;
+    std::string _levelFilePath = "";
 };
 
 #endif

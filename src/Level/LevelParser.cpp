@@ -40,7 +40,7 @@ Level LevelParser::parseLevelFromTmx(std::string filePath, SpritesheetID sprites
         // Custom map properties
         for(auto prop : map.getProperties()) {
             if(prop.getName() == "nextLevel" && prop.getType() == tmx::Property::Type::String) {
-                level.setNextLevel(prop.getStringValue());
+                level.setNextLevel("res/tiled/" + prop.getStringValue());
             }
             else if(prop.getName() == "paintGoalPercent" && prop.getType() == tmx::Property::Type::Float) {
                 level.setPaintGoalPercent(prop.getFloatValue());

@@ -35,7 +35,7 @@ public:
 
 private:
     const int X_BORDER_BUFFER = 6;
-    const int Y_BORDER_BUFFER = 3;
+    const int Y_BORDER_BUFFER = 4;
 
     Text* _text = nullptr;
     Audio* _audio = nullptr;
