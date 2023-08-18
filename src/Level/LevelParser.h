@@ -19,6 +19,7 @@ public:
 
 private:
     static PrefabType convertStringToPrefabType(std::string prefabTypeString);
+    static std::vector<strb::vec2> parsePathFromString(std::string pathString);
 
 };
 

@@ -11,15 +11,11 @@ public:
         Tile tile = level->getTileAt(tilePos.x, tilePos.y);
         switch(tile.type) {
             case TileType::GROUND: {
-                if(tile.status != TileStatus::LIGHT) {
-                    tile.spritesheetRect = {0, 0, 16, 16};
+                if(tile.status == TileStatus::LIGHT) {
+                    std::bitset<4> bitmask = getBitmaskValueForTile(level, tilePos);
+                    tile.spritesheetRect = getLightGroundSpritesheetRect(bitmask);
                     level->setTileAt(tilePos.x, tilePos.y, tile);
-                    return;
                 }
-                // light tile - lets find the right spritesheet rect
-                std::bitset<4> bitmask = getBitmaskValueForTile(level, tilePos);
-                tile.spritesheetRect = getLightGroundSpritesheetRect(bitmask);
-                level->setTileAt(tilePos.x, tilePos.y, tile);
                 break;
             }
             case TileType::WALL: {

@@ -48,7 +48,6 @@ namespace {
             if(transform.goalPosition == transform.position) {
                 if(transform.position == track.getCurrentNode()) {
                     track.advanceNode();
-                    std::cout << "advancing node to " << track.getCurrentNode() << std::endl;
                     strb::vec2 posDiff = track.getCurrentNode() - transform.position;
                     if(posDiff.x > 0) direction.direction = Direction::EAST;
                     else if(posDiff.x < 0) direction.direction = Direction::WEST;

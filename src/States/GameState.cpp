@@ -2,6 +2,7 @@
 #include "RandomGen.h"
 #include "SpritesheetRegistry.h"
 #include "EntityRegistry.h"
+#include "LevelParser.h"
 // Components
 #include "InputComponent.h"
 #include "RenderComponent.h"
@@ -26,49 +27,35 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 
 /**
  * TODO:
- * - Add tiled support
- * - Make paint mechanic FUN!! Explode enemies to paint. Get powerups to paint more efficiently. Definitely don't require 100% paint coverage
- *     - Can move on to next floor only after painting certain amount
- * - Add basic enemies
- * - Add level generation (or create premade levels)
+ * - Rename level1 to something else (way too big for 1st level)
+ * - Add bonus tile support
+ * - Add goal on paint meter
+ * - Add stairs functionality
+ *     - Maybe add score screen after each level? Show total tiles painted, enemies killed, bonus tiles, etc.
+ * - Add more enemies/items
+ *     - Teleporting enemy that shoots out black paint in AOE around it after teleport
+ *         - Teleports on hit ?
+ *     - Paint emitter that shoots out paint when you hit it
+ * - Add sounds, MUSIC???
+ * - Add menu
+ * - Add tutorial level
 */
 
 bool GameState::init() {
-
     // Input
     _keyboard = std::make_unique<Keyboard>();
     _mouse = std::make_unique<Mouse>(getRenderScale(), getRenderScale());
     _controller = std::make_unique<Controller>();
-
-    // Level init
-    Tile d = {TileType::GROUND, TileStatus::DARK, {0, 0, 16, 16}}; //dark tile
-    Tile l = {TileType::GROUND, TileStatus::LIGHT, {1, 0, 16, 16}}; //light tile
-    Tile e = {TileType::WALL, TileStatus::NOVAL, {2, 0, 16, 16}}; //empty tile
-    Tile w = {TileType::WALL, TileStatus::NOVAL, {0, 0, 16, 16}}; // wall tile
-    _level.allocateTilemap(12, 12);
-    _level.setTileset(SpritesheetRegistry::getSpritesheet(SpritesheetID::DEFAULT_TILESET));
-    _level.setTileSize(16);
-    _level.setPlayerId(_player);
-    _level.setTilemap({
-        {e, w, w, w, e, e, w, w, w, w, w, e},
-        {w, d, d, d, w, w, d, d, d, d, d, w},
-        {w, d, d, d, d, d, d, w, w, w, d, w},
-        {w, d, d, d, d, d, d, d, w, w, d, w},
-        {w, d, d, d, d, d, d, d, w, w, d, w},
-        {w, d, d, d, d, d, d, w, w, w, d, w},
-        {w, d, d, d, d, d, d, d, d, d, d, w},
-        {w, d, d, w, d, d, d, d, d, d, d, w},
-        {w, d, d, d, d, d, d, d, d, d, d, w},
-        {w, d, d, d, d, d, d, d, d, d, d, w},
-        {w, d, d, d, w, d, d, w, d, d, d, w},
-        {e, w, w, w, w, w, w, w, w, w, w, e},
-    });
-
-    // Entity init
+    
+    // ECS init
     auto ecs = EntityRegistry::getInstance();
     ecs->init();
+
+    // Level/Systems init
+    _level = LevelParser::parseLevelFromTmx("res/tiled/level1.tmx", SpritesheetID::DEFAULT_TILESET);
+    _level.updatePaintTiles();
     initSystems();
-    initPrefabs();
+    _level.spawnPrefabs();
 
     // Camera
     auto& pTransform = ecs->getComponent<TransformComponent>(_player);

@@ -36,7 +36,7 @@ void Level::render(int xOffset, int yOffset) {
                 continue;
                }
             Tile t = getTileAt(x, y);
-            if(t.type == TileType::GROUND || t.type == TileType::WALL) TileSpritesheetHelper::updateSpritesheetRect(this, {(float) x, (float) y});
+            if(t.type == TileType::GROUND && t.status == TileStatus::LIGHT) TileSpritesheetHelper::updateSpritesheetRect(this, {(float) x, (float) y});
             if(t.spritesheetRect.w == 0 && t.spritesheetRect.h == 0) continue;
 
             _tileset->setTileWidth(t.spritesheetRect.w);
@@ -46,6 +46,21 @@ void Level::render(int xOffset, int yOffset) {
             _tileset->setIsAnimated(false);
 
             _tileset->render(x * _tileSize + xOffset, y * _tileSize + yOffset, t.spritesheetRect.w, t.spritesheetRect.h);
+        }
+    }
+}
+
+void Level::updatePaintTiles() {
+    _numOfPaintableTiles = 0;
+    _numOfPaintedTiles = 0;
+    for(size_t x = 0; x < _tilemapWidth; ++x) {
+        for(size_t y = 0; y < _tilemapHeight; ++y) {
+            if(getTileAt(x, y).type == TileType::GROUND) {
+                ++_numOfPaintableTiles;
+                if(getTileAt(x, y).status == TileStatus::LIGHT) {
+                    ++_numOfPaintedTiles;
+                }
+            }
         }
     }
 }
@@ -129,19 +144,4 @@ LightMap* Level::getLightMap() {
 
 std::pair<int, int> Level::getPaintedTileStatus() {
     return std::make_pair(_numOfPaintedTiles, _numOfPaintableTiles);
-}
-
-void Level::updatePaintTiles() {
-    _numOfPaintableTiles = 0;
-    _numOfPaintedTiles = 0;
-    for(size_t x = 0; x < _tilemapWidth; ++x) {
-        for(size_t y = 0; y < _tilemapHeight; ++y) {
-            if(getTileAt(x, y).type == TileType::GROUND) {
-                ++_numOfPaintableTiles;
-                if(getTileAt(x, y).status == TileStatus::LIGHT) {
-                    ++_numOfPaintedTiles;
-                }
-            }
-        }
-    }
 }

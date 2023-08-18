@@ -20,6 +20,7 @@ public:
     void allocateTilemap(int width, int height);
     void spawnPrefabs();
     void render(int xOffset, int yOffset);
+    void updatePaintTiles();
 
     void setTilemap(std::vector<std::vector<Tile>> tilemap);
     void setLightMap(std::shared_ptr<LightMap> lightMap);
@@ -41,7 +42,6 @@ public:
     std::pair<int, int> getPaintedTileStatus();
 
 private:
-    void updatePaintTiles();
 
     std::shared_ptr<LightMap> _lMap = nullptr;
     std::vector<std::vector<Tile>> _tilemap;
