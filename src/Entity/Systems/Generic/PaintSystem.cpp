@@ -29,8 +29,10 @@ void PaintSystem::update(float timescale, Level* level) {
                     paintAttack.attacking = false;
                     // _audioPlayer->playAudio(ent, AudioSound::PAINT, 0.5f);
                     if(tile.entityOnTile >= 0) {
-                        auto& health = ecs->getComponent<HealthComponent>(tile.entityOnTile);
-                        --health.points;
+                        if(ecs->hasComponent<HealthComponent>(tile.entityOnTile)) {
+                            auto& health = ecs->getComponent<HealthComponent>(tile.entityOnTile);
+                            --health.points;
+                        }
                     }
                 }
             }

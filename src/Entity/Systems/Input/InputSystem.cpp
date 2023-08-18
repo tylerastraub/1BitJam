@@ -87,7 +87,7 @@ void InputSystem::update() {
            ecs->hasComponent<DirectionComponent>(ent)) {
             _inputRequested = true;
             auto& paintAttack = ecs->getComponent<PaintAttackComponent>(ent);
-            if(paintAttack.msSinceLastPaintAttack > paintAttack.msCantActAfterPaintAttack) {
+            if(paintAttack.msSinceLastPaintAttack > paintAttack.msCantActAfterPaintAttack && transform.goalPosition == transform.position) {
                 paintAttack.msSinceLastPaintAttack = 0;
                 paintAttack.attacking = true;
                 strb::vec2 offset = {0.f, 0.f};

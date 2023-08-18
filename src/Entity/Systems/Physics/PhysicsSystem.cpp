@@ -10,11 +10,15 @@
 void PhysicsSystem::update(float timescale) {
     auto ecs = EntityRegistry::getInstance();
     for(auto ent : _entities) {
-        auto& health = ecs->getComponent<HealthComponent>(ent);
         auto& physics = ecs->getComponent<PhysicsComponent>(ent);
-        if(health.points < 1) {
-            physics.velocity = {0.f, 0.f};
-            continue;
+        auto oldVelocity = physics.velocity;
+        
+        if(ecs->hasComponent<HealthComponent>(ent)) {
+            auto& health = ecs->getComponent<HealthComponent>(ent);
+            if(health.points < 1) {
+                physics.velocity = {0.f, 0.f};
+                continue;
+            }
         }
 
         auto& transform = ecs->getComponent<TransformComponent>(ent);

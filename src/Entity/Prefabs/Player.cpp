@@ -35,10 +35,6 @@ namespace {
             painter.requestsPaint = true;
             painter.paintPos = {std::roundf(transform.position.x), std::roundf(transform.position.y)};
 
-            if(paintAttack.attacking && paintAttack.wasAttackingLastTick) {
-                
-            }
-
             if(paintAttack.msSinceLastPaintAttack < paintAttack.msCantActAfterPaintAttack) {
                 input.allowedInputs = {};
             }
@@ -85,7 +81,7 @@ namespace prefab {
         ecs->addComponent<StateComponent>(ent, StateComponent{EntityState::IDLE});
         ecs->addComponent<PhysicsComponent>(ent, PhysicsComponent{{0.f, 0.f}, {0.045f, 0.045f}});
         ecs->addComponent<CollisionComponent>(ent, CollisionComponent{});
-        ecs->addComponent<TileFlipComponent>(ent, TileFlipComponent{false}); // disable for now but can still use lock
+        ecs->addComponent<TileFlipComponent>(ent, TileFlipComponent{false}); // disable flipping for now but can still use lock
         ecs->addComponent<PainterComponent>(ent, PainterComponent{true, TileStatus::LIGHT});
         ecs->addComponent<PaintAttackComponent>(ent, PaintAttackComponent{});
 

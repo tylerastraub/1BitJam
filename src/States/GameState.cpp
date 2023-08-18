@@ -27,8 +27,6 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 
 /**
  * TODO:
- * - Fix bug where right after entering new level, walking into tile you immediately paint attacked causes player to freeze
- *     - Check out places where position != goalPosition
  * - Fix bug where player can walk over stairs by holding down move key
  * - Figure out bonus tile purpose
  * - Add more enemies/items
