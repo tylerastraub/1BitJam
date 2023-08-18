@@ -9,6 +9,8 @@ enum class SpritesheetID {
     HUD,
     PAINT_METER,
     SMUDGE,
+    PAINT_SPALSH,
+    SCRUBBER,
 };
 
 #endif

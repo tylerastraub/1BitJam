@@ -11,7 +11,9 @@ void DeathSystem::update(float timescale) {
         auto& health = ecs->getComponent<HealthComponent>(ent);
         if(health.points < 1) {
             auto& state = ecs->getComponent<StateComponent>(ent);
+            auto& dir = ecs->getComponent<DirectionComponent>(ent);
             state.state = EntityState::DEAD;
+            dir.direction = Direction::SOUTH;
             if(!health.dead) {
                 health.dead = true;
                 health.points = 0;

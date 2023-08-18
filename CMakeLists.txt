@@ -35,6 +35,7 @@ set(SOURCE_INCLUDES
     ${PROJECT_SOURCE_DIR}/src/Entity/Components
     ${PROJECT_SOURCE_DIR}/src/Entity/Components/Generic
     ${PROJECT_SOURCE_DIR}/src/Entity/Components/Input
+    ${PROJECT_SOURCE_DIR}/src/Entity/Components/Pathfinding
     ${PROJECT_SOURCE_DIR}/src/Entity/Components/Physics
     ${PROJECT_SOURCE_DIR}/src/Entity/Components/Render
     ${PROJECT_SOURCE_DIR}/src/Entity/Components/Specialized
@@ -70,6 +71,7 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/src/Entity/Components/Render/SpritesheetPropertiesComponent.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Core/EntityManager.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Player.cpp
+    ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Scrubber.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Smudge.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/DialogueTrigger.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/PrefabSpawnTrigger.cpp

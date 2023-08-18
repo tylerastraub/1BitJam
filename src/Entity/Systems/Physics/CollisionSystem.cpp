@@ -26,6 +26,7 @@ void CollisionSystem::update(float timescale, Level* level) {
                     collision.collidingLeft = false;
                 }
                 transform.goalPosition.x = transform.position.x;
+                collision.lastCollision = tile;
             }
             else {
                 collision.collidingLeft = false;
@@ -45,6 +46,7 @@ void CollisionSystem::update(float timescale, Level* level) {
                     collision.collidingUp = false;
                 }
                 transform.goalPosition.y = transform.position.y;
+                collision.lastCollision = tile;
             }
             else {
                 collision.collidingUp = false;

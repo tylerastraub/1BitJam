@@ -34,7 +34,6 @@ namespace {
 
             auto& transform = ecs->getComponent<TransformComponent>(owner);
             auto& painter = ecs->getComponent<PainterComponent>(owner);
-            auto& paintAttack = ecs->getComponent<PaintAttackComponent>(owner);
             auto& navigation = ecs->getComponent<NavigationComponent>(owner);
             auto& direction = ecs->getComponent<DirectionComponent>(owner);
             auto& state = ecs->getComponent<StateComponent>(owner);
@@ -81,14 +80,6 @@ namespace {
                         }
                     }
                 }
-            }
-
-            if(ecs->getComponent<HealthComponent>(owner).points > 0) {
-                state.state = EntityState::IDLE;
-            }
-            else {
-                state.state = EntityState::DEAD;
-                direction.direction = Direction::SOUTH;
             }
         }
 

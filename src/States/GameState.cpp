@@ -18,6 +18,7 @@
 // Prefabs
 #include "Player.h"
 #include "Smudge.h"
+#include "Scrubber.h"
 
 #include <chrono>
 
@@ -25,9 +26,9 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 
 /**
  * TODO:
+ * - Add tiled support
  * - Make paint mechanic FUN!! Explode enemies to paint. Get powerups to paint more efficiently. Definitely don't require 100% paint coverage
  *     - Can move on to next floor only after painting certain amount
- * - Remove tile flip/revamp lock system
  * - Add basic enemies
  * - Add level generation (or create premade levels)
 */
@@ -49,17 +50,17 @@ bool GameState::init() {
     _level.setTileSize(16);
     _level.setPlayerId(_player);
     _level.setTilemap({
-        {e, w, w, w, w, w, w, w, w, w, w, e},
-        {w, d, d, d, d, d, d, d, d, d, d, w},
+        {e, w, w, w, e, e, w, w, w, w, w, e},
+        {w, d, d, d, w, w, d, d, d, d, d, w},
         {w, d, d, d, d, d, d, w, w, w, d, w},
-        {w, d, d, d, d, d, d, w, e, w, d, w},
-        {w, d, d, d, d, d, d, w, e, w, d, w},
+        {w, d, d, d, d, d, d, d, w, w, d, w},
+        {w, d, d, d, d, d, d, d, w, w, d, w},
         {w, d, d, d, d, d, d, w, w, w, d, w},
         {w, d, d, d, d, d, d, d, d, d, d, w},
         {w, d, d, w, d, d, d, d, d, d, d, w},
         {w, d, d, d, d, d, d, d, d, d, d, w},
         {w, d, d, d, d, d, d, d, d, d, d, w},
-        {w, d, d, d, d, d, d, d, d, d, d, w},
+        {w, d, d, d, w, d, d, w, d, d, d, w},
         {e, w, w, w, w, w, w, w, w, w, w, e},
     });
 
@@ -222,4 +223,23 @@ void GameState::initPrefabs() {
 
     _player = prefab::Player::create(3, 3);
     prefab::Smudge::create(6, 6);
+    std::vector<strb::vec2> path = {
+        {1, 1},
+        {3, 1},
+        {3, 2},
+        {6, 2},
+        {6, 1},
+        {10, 1},
+        {10, 10},
+        {8, 10},
+        {8, 9},
+        {6, 9},
+        {6, 10},
+        {5, 10},
+        {5, 9},
+        {3, 9},
+        {3, 10},
+        {1, 10},
+    };
+    prefab::Scrubber::create(1, 1, path);
 }

@@ -14,7 +14,7 @@ void PhysicsSystem::update(float timescale) {
         auto& physics = ecs->getComponent<PhysicsComponent>(ent);
         if(health.points < 1) {
             physics.velocity = {0.f, 0.f};
-            return;
+            continue;
         }
 
         auto& transform = ecs->getComponent<TransformComponent>(ent);

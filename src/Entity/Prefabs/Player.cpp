@@ -35,6 +35,10 @@ namespace {
             painter.requestsPaint = true;
             painter.paintPos = {std::roundf(transform.position.x), std::roundf(transform.position.y)};
 
+            if(paintAttack.attacking && paintAttack.wasAttackingLastTick) {
+                
+            }
+
             if(paintAttack.msSinceLastPaintAttack < paintAttack.msCantActAfterPaintAttack) {
                 input.allowedInputs = {};
             }
@@ -55,6 +59,8 @@ namespace {
             else {
                 state.state = EntityState::IDLE;
             }
+
+            paintAttack.wasAttackingLastTick = paintAttack.attacking;
         }
 
     private:

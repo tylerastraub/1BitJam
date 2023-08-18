@@ -2,6 +2,7 @@
 #define COLLISION_COMPONENT_H
 
 #include "vec2.h"
+#include "Tile.h"
 
 #include <SDL.h>
 
@@ -10,6 +11,7 @@ struct CollisionComponent {
     bool collidingRight = false;
     bool collidingUp = false;
     bool collidingDown = false;
+    Tile lastCollision;
 };
 
 #endif

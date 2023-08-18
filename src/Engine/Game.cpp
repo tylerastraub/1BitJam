@@ -160,11 +160,23 @@ bool Game::loadResources() {
     paintMeter->setTileHeight(60);
     SpritesheetRegistry::addSpritesheet(SpritesheetID::PAINT_METER, paintMeter);
     
+    std::shared_ptr<Spritesheet> paintSplashSpritesheet = std::make_shared<Spritesheet>();
+    if(!paintSplashSpritesheet->load(_renderer, "res/spritesheet/paint_splash_spritesheet.png")) return false;
+    paintSplashSpritesheet->setTileWidth(16);
+    paintSplashSpritesheet->setTileHeight(16);
+    SpritesheetRegistry::addSpritesheet(SpritesheetID::PAINT_SPALSH, paintSplashSpritesheet);
+    
     std::shared_ptr<Spritesheet> smudgeSpritesheet = std::make_shared<Spritesheet>();
     if(!smudgeSpritesheet->load(_renderer, "res/spritesheet/smudge_spritesheet.png")) return false;
     smudgeSpritesheet->setTileWidth(16);
     smudgeSpritesheet->setTileHeight(16);
     SpritesheetRegistry::addSpritesheet(SpritesheetID::SMUDGE, smudgeSpritesheet);
+    
+    std::shared_ptr<Spritesheet> scrubberSpritesheet = std::make_shared<Spritesheet>();
+    if(!scrubberSpritesheet->load(_renderer, "res/spritesheet/scrubber_spritesheet.png")) return false;
+    scrubberSpritesheet->setTileWidth(16);
+    scrubberSpritesheet->setTileHeight(16);
+    SpritesheetRegistry::addSpritesheet(SpritesheetID::SCRUBBER, scrubberSpritesheet);
 
     // Audio
     _audioPlayer = std::make_unique<Audio>();
