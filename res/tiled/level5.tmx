@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="808">
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="810">
  <properties>
+  <property name="bonusMessage" value="Paint attack range increased!"/>
   <property name="paintGoalPercent" type="float" value="0.85"/>
+  <property name="rangeMod" type="int" value="2"/>
  </properties>
  <tileset firstgid="1" source="default_tileset.tsx"/>
  <layer id="1" name="Tile Layer 1" width="40" height="20">
@@ -666,7 +668,6 @@
   <object id="640" type="ground" x="288" y="288" width="16" height="16"/>
   <object id="641" type="ground" x="304" y="256" width="16" height="16"/>
   <object id="642" type="ground" x="240" y="256" width="16" height="16"/>
-  <object id="643" type="ground" x="256" y="256" width="16" height="16"/>
   <object id="644" type="ground" x="272" y="256" width="16" height="16"/>
   <object id="645" type="ground" x="288" y="256" width="16" height="16"/>
   <object id="646" type="ground" x="304" y="272" width="16" height="16"/>
@@ -721,7 +722,6 @@
   <object id="695" type="ground" x="208" y="32" width="16" height="16"/>
   <object id="696" type="ground" x="240" y="32" width="16" height="16"/>
   <object id="697" type="ground" x="256" y="32" width="16" height="16"/>
-  <object id="698" type="ground" x="224" y="32" width="16" height="16"/>
   <object id="699" type="ground" x="208" y="16" width="16" height="16"/>
   <object id="700" type="ground" x="240" y="16" width="16" height="16"/>
   <object id="701" type="ground" x="256" y="16" width="16" height="16"/>
@@ -854,6 +854,12 @@
    <point/>
   </object>
   <object id="807" name="smudge" x="528" y="256">
+   <point/>
+  </object>
+  <object id="808" name="spreader" x="224" y="32">
+   <point/>
+  </object>
+  <object id="809" name="spreader" x="256" y="256">
    <point/>
   </object>
  </objectgroup>

@@ -187,29 +187,23 @@ void GameState::tick(float timescale) {
     if(!_bonusGoalMet && bonusStatus.first == bonusStatus.second) {
         _bonusGoalMet = true;
         auto levels = FileIO::readFile("res/completedlevels.txt");
-        bool getBonus = true;
-        for(auto line : levels) {
-            if(getLevelFilePath() == line) getBonus = false;
+        if(_level.getBonusMessage().size() > 0) addInfoString(_level.getBonusMessage());
+        auto& powerup = ecs->getComponent<PowerupComponent>(_player);
+        auto file = FileIO::readFile("res/powerups.txt");
+        if(_level.getBonusPowerup().paintAttack) {
+            powerup.paintAttack = true;
+            file.push_back("paintAttackEnabled");
         }
-        if(getBonus) {
-            if(_level.getBonusMessage().size() > 0) addInfoString(_level.getBonusMessage());
-            auto& powerup = ecs->getComponent<PowerupComponent>(_player);
-            auto file = FileIO::readFile("res/powerups.txt");
-            if(_level.getBonusPowerup().paintAttack) {
-                powerup.paintAttack = true;
-                file.push_back("paintAttackEnabled");
-            }
-            if(powerup.speedModifier > 0.f) file.push_back("speedMod=" + std::to_string(powerup.speedModifier));
-            if(powerup.paintAttackRangeAddition > 0) file.push_back("rangeMod=" + std::to_string(powerup.paintAttackRangeAddition));
-            powerup.speedModifier += powerup.speedModifier;
-            powerup.paintAttackRangeAddition += powerup.paintAttackRangeAddition;
-            auto& physics = ecs->getComponent<PhysicsComponent>(_player);
-            physics.moveSpeed.x += powerup.speedModifier;
-            physics.moveSpeed.y += powerup.speedModifier;
-            auto& paintAttack = ecs->getComponent<PaintAttackComponent>(_player);
-            paintAttack.range += powerup.paintAttackRangeAddition;
-            FileIO::writeFile("res/powerups.txt", file);
-        }
+        if(powerup.speedModifier > 0.f) file.push_back("speedMod=" + std::to_string(powerup.speedModifier));
+        if(powerup.paintAttackRangeAddition > 0) file.push_back("rangeMod=" + std::to_string(powerup.paintAttackRangeAddition));
+        powerup.speedModifier += _level.getBonusPowerup().speedModifier;
+        powerup.paintAttackRangeAddition += _level.getBonusPowerup().paintAttackRangeAddition;
+        auto& physics = ecs->getComponent<PhysicsComponent>(_player);
+        physics.moveSpeed.x += _level.getBonusPowerup().speedModifier;
+        physics.moveSpeed.y += _level.getBonusPowerup().speedModifier;
+        auto& paintAttack = ecs->getComponent<PaintAttackComponent>(_player);
+        paintAttack.range += _level.getBonusPowerup().paintAttackRangeAddition;
+        FileIO::writeFile("res/powerups.txt", file);
     }
     if(!_allTilesGoalMet && _paintPercent == 1.f) {
         _allTilesGoalMet = true;
@@ -262,10 +256,10 @@ void GameState::render() {
         tinyText->setString(*_infoStrings.begin());
         SDL_SetRenderDrawColor(getRenderer(), 0x00, 0x00, 0x00, 0xFF);
         SDL_Rect backdrop = {
-            (int) (getGameSize().x / 2 - tinyText->getWidth() / 2),
-            (int) (getGameSize().y - tinyText->getHeight()),
-            tinyText->getWidth(),
-            tinyText->getHeight()
+            (int) (getGameSize().x / 2 - tinyText->getWidth() / 2 - 1),
+            (int) (getGameSize().y - tinyText->getHeight() - 1),
+            tinyText->getWidth() + 2,
+            tinyText->getHeight() + 2
         };
         SDL_RenderFillRect(getRenderer(), &backdrop);
         tinyText->render(getGameSize().x / 2 - tinyText->getWidth() / 2, getGameSize().y - tinyText->getHeight());

@@ -26,7 +26,7 @@
 33,10,10,34,33,10,10,10,10,10,10,34,1,1,1
 </data>
  </layer>
- <objectgroup id="2" name="collisionmap" visible="0">
+ <objectgroup id="2" name="collisionmap">
   <object id="1" type="wall" x="0" y="0" width="16" height="16"/>
   <object id="2" type="wall" x="16" y="0" width="16" height="16"/>
   <object id="3" type="wall" x="32" y="0" width="16" height="16"/>
@@ -257,7 +257,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="3" name="objects">
+ <objectgroup id="3" name="objects" visible="0">
   <object id="174" name="player" x="32" y="32">
    <point/>
   </object>

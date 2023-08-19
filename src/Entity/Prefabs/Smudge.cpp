@@ -52,7 +52,8 @@ namespace {
                     if(neighbors.empty()) break;
                     int i = RandomGen::getRandomInt(0, 3);
                     goalPos = transform.position + neighbors[i];
-                    if(navigation.level.getTileAt(goalPos.x, goalPos.y).type == TileType::GROUND) {
+                    if(navigation.level.getTileAt(goalPos.x, goalPos.y).type == TileType::GROUND ||
+                       navigation.level.getTileAt(goalPos.x, goalPos.y).type == TileType::BONUS) {
                         foundGoal = true;
                         transform.goalPosition = goalPos;
                         // state change
