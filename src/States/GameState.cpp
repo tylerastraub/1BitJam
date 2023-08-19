@@ -194,10 +194,10 @@ void GameState::tick(float timescale) {
             powerup.paintAttack = true;
             file.push_back("paintAttackEnabled");
         }
-        if(powerup.speedModifier > 0.f) file.push_back("speedMod=" + std::to_string(powerup.speedModifier));
-        if(powerup.paintAttackRangeAddition > 0) file.push_back("rangeMod=" + std::to_string(powerup.paintAttackRangeAddition));
         powerup.speedModifier += _level.getBonusPowerup().speedModifier;
         powerup.paintAttackRangeAddition += _level.getBonusPowerup().paintAttackRangeAddition;
+        if(powerup.speedModifier > 0.f) file.push_back("speedMod=" + std::to_string(powerup.speedModifier));
+        if(powerup.paintAttackRangeAddition > 0) file.push_back("rangeMod=" + std::to_string(powerup.paintAttackRangeAddition));
         auto& physics = ecs->getComponent<PhysicsComponent>(_player);
         physics.moveSpeed.x += _level.getBonusPowerup().speedModifier;
         physics.moveSpeed.y += _level.getBonusPowerup().speedModifier;
