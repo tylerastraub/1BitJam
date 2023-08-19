@@ -73,6 +73,7 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Player.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Scrubber.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Smudge.cpp
+    ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Spreader.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/DialogueTrigger.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Prefabs/Triggers/PrefabSpawnTrigger.cpp
     ${PROJECT_SOURCE_DIR}/src/Entity/Systems/Generic/DeathSystem.cpp

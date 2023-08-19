@@ -87,7 +87,7 @@ void InputSystem::update() {
            ecs->hasComponent<DirectionComponent>(ent)) {
             _inputRequested = true;
             auto& paintAttack = ecs->getComponent<PaintAttackComponent>(ent);
-            if(paintAttack.msSinceLastPaintAttack > paintAttack.msCantActAfterPaintAttack && transform.goalPosition == transform.position) {
+            if(paintAttack.msSinceLastPaintAttack > paintAttack.msCantActAfterPaintAttack && physics.velocity.x == 0.f && physics.velocity.y == 0) {
                 paintAttack.msSinceLastPaintAttack = 0;
                 paintAttack.attacking = true;
                 strb::vec2 offset = {0.f, 0.f};
@@ -106,8 +106,9 @@ void InputSystem::update() {
                         break;
                 }
                 auto& painter = ecs->getComponent<PainterComponent>(ent);
-                painter.paintPos = transform.position + offset;
+                painter.paintPos.push_back(transform.position + offset);
                 painter.requestsPaint = true;
+                _audioPlayer->playAudio(ent, AudioSound::PAINT_ATTACK, 0.5f);
             }
         }
     }

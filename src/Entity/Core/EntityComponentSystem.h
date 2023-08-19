@@ -26,6 +26,7 @@ public:
         _entityManager = std::make_unique<EntityManager>();
         _componentManager = std::make_unique<ComponentManager>();
         _systemManager = std::make_unique<SystemManager>();
+        _watchers->clear();
     }
 
     // Entity

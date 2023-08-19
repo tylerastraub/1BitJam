@@ -33,12 +33,12 @@ namespace {
             auto& state = ecs->getComponent<StateComponent>(owner);
             auto& physics = ecs->getComponent<PhysicsComponent>(owner);
             painter.requestsPaint = true;
-            painter.paintPos = {std::roundf(transform.position.x), std::roundf(transform.position.y)};
+            painter.paintPos.push_back({std::roundf(transform.position.x), std::roundf(transform.position.y)});
 
             if(paintAttack.msSinceLastPaintAttack < paintAttack.msCantActAfterPaintAttack) {
                 input.allowedInputs = {};
             }
-            else if(transform.position == transform.goalPosition) {
+            else if(transform.position == transform.goalPosition && physics.velocity.x == 0.f && physics.velocity.y == 0.f) {
                 input.allowedInputs = {InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT, InputEvent::ACTION, InputEvent::LOCK};
             }
             else {

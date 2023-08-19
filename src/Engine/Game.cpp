@@ -178,6 +178,12 @@ bool Game::loadResources() {
     scrubberSpritesheet->setTileWidth(16);
     scrubberSpritesheet->setTileHeight(16);
     SpritesheetRegistry::addSpritesheet(SpritesheetID::SCRUBBER, scrubberSpritesheet);
+    
+    std::shared_ptr<Spritesheet> spreaderSpritesheet = std::make_shared<Spritesheet>();
+    if(!spreaderSpritesheet->load(_renderer, "res/spritesheet/spreader_spritesheet.png")) return false;
+    spreaderSpritesheet->setTileWidth(16);
+    spreaderSpritesheet->setTileHeight(16);
+    SpritesheetRegistry::addSpritesheet(SpritesheetID::SPREADER, spreaderSpritesheet);
 
     // Audio
     _audioPlayer = std::make_unique<Audio>();

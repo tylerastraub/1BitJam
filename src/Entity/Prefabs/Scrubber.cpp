@@ -43,7 +43,7 @@ namespace {
             auto& collision = ecs->getComponent<CollisionComponent>(owner);
             auto& track = ecs->getComponent<TrackComponent>(owner);
             
-            painter.paintPos = {std::roundf(transform.position.x), std::roundf(transform.position.y)};
+            painter.paintPos.push_back({std::roundf(transform.position.x), std::roundf(transform.position.y)});
             painter.requestsPaint = true;
             if(transform.goalPosition == transform.position) {
                 if(transform.position == track.getCurrentNode()) {

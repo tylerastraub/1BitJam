@@ -4,11 +4,13 @@
 #include "Tile.h"
 #include "vec2.h"
 
+#include <vector>
+
 struct PainterComponent {
     bool canPaint = true;
     TileStatus paintColor = TileStatus::NOVAL;
     bool requestsPaint = false;
-    strb::vec2 paintPos = {-1.f, -1.f};
+    std::vector<strb::vec2> paintPos = {};
 };
 
 #endif

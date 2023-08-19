@@ -39,7 +39,7 @@ namespace {
             auto& state = ecs->getComponent<StateComponent>(owner);
 
             _actionTimerCounter += timescale * 1000;
-            painter.paintPos = {std::roundf(transform.position.x), std::roundf(transform.position.y)};
+            painter.paintPos.push_back({std::roundf(transform.position.x), std::roundf(transform.position.y)});
 
             if(_actionTimerCounter >= _actionTimerLimit) {
                 _actionTimerCounter = 0;

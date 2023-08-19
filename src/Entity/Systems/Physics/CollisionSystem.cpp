@@ -12,7 +12,6 @@ void CollisionSystem::update(float timescale, Level* level) {
     auto ecs = EntityRegistry::getInstance();
     for(auto ent : _entities) {
         auto& collision = ecs->getComponent<CollisionComponent>(ent);
-        auto& physics = ecs->getComponent<PhysicsComponent>(ent);
         auto& transform = ecs->getComponent<TransformComponent>(ent);
         Tile tile;
 

@@ -28,16 +28,13 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 /**
  * TODO:
  * - Figure out bonus tile purpose
- * - Add text for when goal is met, 100% of tiles painted, and bonus 100%
- * - Fix bug where inputs are carrying over between states (and inputPressed is getting read even though input remains down)
  * - Add more enemies/items
  *     - Teleporting enemy that shoots out black paint in AOE around it after teleport
  *         - Teleports on hit ?
- *     - Paint emitter that shoots out paint when you hit it
  *     - Smudge spawner
  * - Add sounds, MUSIC???
- * - Add menu
- * - Add tutorial level
+ * - Add level select main menu
+ * - Add tutorial level (level 0)
 */
 
 bool GameState::init() {
@@ -85,6 +82,7 @@ void GameState::tick(float timescale) {
     auto ecs = EntityRegistry::getInstance();
 
     if(_level.isLevelComplete()) {
+        if(_infoStrings.size() > 0) _infoStrings.clear();
         if(_dialogueBox.getTimeActive() == 0) {
             _dialogueBox.setString(_level.getLevelResults(_timer, _deathSystem->getNumOfDeaths(), getSettings()->getStringKeyboardControlForInputEvent(InputEvent::ACTION)));
             _dialogueBox.setIsEnabled(true);
@@ -139,7 +137,7 @@ void GameState::tick(float timescale) {
     std::pair<int, int> bonusStatus = _level.getBonusTileStatus();
 
     // Info display text
-    if(!_tileGoalMet && _paintPercent > _level.getPaintGoalPercent()) {
+    if(!_tileGoalMet && _paintPercent >= _level.getPaintGoalPercent()) {
         _tileGoalMet = true;
         addInfoString("Paint goal hit!");
     }
@@ -228,6 +226,7 @@ void GameState::initSystems() {
 
     sig.reset();
     _inputSystem = ecs->registerSystem<InputSystem>();
+    _inputSystem->_audioPlayer = getAudioPlayer();
     _inputSystem->init(_keyboard.get(), _controller.get(), getSettings());
     sig.set(ecs->getComponentType<InputComponent>(), true);
     ecs->setSystemSignature<InputSystem>(sig);
@@ -260,7 +259,6 @@ void GameState::initSystems() {
     sig.reset();
     _collisionSystem = ecs->registerSystem<CollisionSystem>();
     sig.set(ecs->getComponentType<CollisionComponent>(), true);
-    sig.set(ecs->getComponentType<PhysicsComponent>(), true);
     sig.set(ecs->getComponentType<TransformComponent>(), true);
     ecs->setSystemSignature<CollisionSystem>(sig);
     

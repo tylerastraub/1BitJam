@@ -11,6 +11,7 @@ enum class SpritesheetID {
     SMUDGE,
     PAINT_SPALSH,
     SCRUBBER,
+    SPREADER,
 };
 
 #endif

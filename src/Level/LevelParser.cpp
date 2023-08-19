@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Smudge.h"
 #include "Scrubber.h"
+#include "Spreader.h"
 
 #include <algorithm>
 #include <iostream>
@@ -74,6 +75,10 @@ Level LevelParser::parseLevelFromTmx(std::string filePath, SpritesheetID sprites
                             }
                             Entity scrubber = prefab::Scrubber::create(object.getPosition().x / tileSize, object.getPosition().y / tileSize, path);
                             level.addPrefab(scrubber);
+                        }
+                        else if(object.getName() == "spreader") {
+                            Entity spreader = prefab::Spreader::create(object.getPosition().x / tileSize, object.getPosition().y / tileSize);
+                            level.addPrefab(spreader);
                         }
                         // ============================== TRIGGERS ==============================
                         else if(object.getName() == "trigger") {

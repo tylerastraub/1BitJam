@@ -3,19 +3,18 @@
 
 enum class AudioSound {
     NOVAL = -1,
-    ACTION,
     CHARACTER_BLIP,
-    TILE_FLIP,
     PAINT_ATTACK,
-    PAINT_BONUS,
-    FOOTSTEP,
-    DEAD,
-    GOAL_REACHED,
-    BONUS_REACHED,
-    ALL_TILES_PAINTED,
-    STAIRS,
-    SCRUBBER,
-    SMUDGE,
+    PAINT_BONUS, // need
+    FOOTSTEP, // need
+    DEAD, // need
+    PAINT_GOAL_REACHED, // need
+    BONUS_REACHED, // need
+    ALL_TILES_PAINTED, // need
+    STAIRS, // need
+    SCRUBBER, // need?
+    SMUDGE, // need?
+    SPREADER, // need
 };
 
 #endif
