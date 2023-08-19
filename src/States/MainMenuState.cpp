@@ -75,6 +75,10 @@ bool MainMenuState::init() {
 }
 
 void MainMenuState::tick(float timescale) {
+    if(_menuTimer < 100) {
+        _menuTimer += timescale * 1000.f;
+        return;
+    }
     if(_keyboard->isKeyPressed(SDL_SCANCODE_SPACE) ||
        _controller->isButtonPressed(SDL_GameControllerButton_Extended::SDL_CONTROLLER_BUTTON_A)) {
         std::string s = _gui->getCurrentSelection()->getId();

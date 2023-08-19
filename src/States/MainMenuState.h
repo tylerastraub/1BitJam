@@ -31,6 +31,8 @@ private:
     strb::vec2 _renderOffset = {0.f, 0.f};
 
     std::unique_ptr<GUI> _gui = nullptr;
+
+    int _menuTimer = 0;
 };
 
 #endif

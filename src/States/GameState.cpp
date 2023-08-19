@@ -189,7 +189,7 @@ void GameState::tick(float timescale) {
         auto levels = FileIO::readFile("res/completedlevels.txt");
         if(_level.getBonusMessage().size() > 0) addInfoString(_level.getBonusMessage());
         auto& powerup = ecs->getComponent<PowerupComponent>(_player);
-        auto file = FileIO::readFile("res/powerups.txt");
+        std::vector<std::string> file = {};
         if(_level.getBonusPowerup().paintAttack) {
             powerup.paintAttack = true;
             file.push_back("paintAttackEnabled");
