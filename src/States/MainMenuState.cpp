@@ -67,8 +67,8 @@ bool MainMenuState::init() {
         _gui->addGUIElement(levelFiveButton);
     }
 
-    _gui->setAllColumnsRenderWidth(160);
-    _gui->setAllRowsRenderHeight(12);
+    _gui->setColumnRenderWidth(0, getGameSize().x);
+    _gui->setAllRowsRenderHeight(10);
     _gui->setCurrentSelection(0, 0);
 
     return true;
@@ -125,7 +125,7 @@ void MainMenuState::render() {
     SDL_SetRenderDrawColor(getRenderer(), 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(getRenderer());
 
-    _gui->render(0, 20);
+    _gui->render(0, 16);
 
     Text* tinyText = getText(TextSize::TINY);
     tinyText->setString("Use arrow keys/SPACE to select");
@@ -133,7 +133,7 @@ void MainMenuState::render() {
 
     Text* smallText = getText(TextSize::SMALL);
     smallText->setString("PAINTMAN");
-    smallText->render(getGameSize().x / 2 - smallText->getWidth() / 4, 2);
+    smallText->render(getGameSize().x / 2 - smallText->getWidth() / 4, 1);
 
     SDL_RenderPresent(getRenderer());
 }

@@ -10,7 +10,7 @@ void Button::render(int x, int y, bool centerAlign) {
     std::string s = getPropertyValue("displayString");
     if(isSelected()) {
         s.insert(0, "> ");
-        s.append(" <");
+        s.append(" < ");
     }
     _text->setString(s);
     int xOffset = 0;

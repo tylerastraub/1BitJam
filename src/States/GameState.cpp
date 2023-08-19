@@ -4,6 +4,7 @@
 #include "EntityRegistry.h"
 #include "LevelParser.h"
 #include "FileIO.h"
+#include "MainMenuState.h"
 // Components
 #include "InputComponent.h"
 #include "RenderComponent.h"
@@ -31,12 +32,12 @@ std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().
 
 /**
  * TODO:
- * - Create struct that keeps track of player powerups, pass it from state to state
+ * - Create level 2, 3, 4, and 5
+ * - Add sounds
  * - Add more enemies/items
  *     - Teleporting enemy that shoots out black paint in AOE around it after teleport
  *         - Teleports on hit ?
  *     - Smudge spawner
- * - Add sounds
 */
 
 bool GameState::init() {
@@ -114,8 +115,15 @@ void GameState::tick(float timescale) {
             _dialogueBox.setIsEnabled(true);
         }
         if(_keyboard->isKeyPressed(getSettings()->getScancode(InputEvent::ACTION))) {
-            if(_dialogueBox.isTextFullyDisplayed()) {
-                _dialogueBox.advanceDialogue();
+            if(_dialogueBox.isTextFullyDisplayed()) {                
+                if(_level.getNextLevel().empty()) {
+                    _dialogueBox.setString("You beat the game!\nCongrats!\n\nPress SPACE to return to main menu.");
+                    _dialogueBox.reset();
+                    _level.setNextLevel("mainmenu");
+                }
+                else {
+                    _dialogueBox.advanceDialogue();
+                }
             }
             else {
                 _dialogueBox.setTextFullyDisplayed(true);
@@ -125,9 +133,15 @@ void GameState::tick(float timescale) {
             auto file = FileIO::readFile("res/completedlevels.txt");
             file.push_back(getLevelFilePath());
             FileIO::writeFile("res/completedlevels.txt", file);
-            GameState* nextState = new GameState();
-            nextState->setLevelFilePath(_level.getNextLevel());
-            setNextState(nextState);
+            if(_level.getNextLevel() == "mainmenu") {
+                MainMenuState* nextState = new MainMenuState();
+                setNextState(nextState);
+            }
+            else {
+                GameState* nextState = new GameState();
+                nextState->setLevelFilePath(_level.getNextLevel());
+                setNextState(nextState);
+            }
         }
         _dialogueBox.tick(timescale);
         _keyboard->updateInputs();

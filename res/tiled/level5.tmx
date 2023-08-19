@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="808">
  <properties>
-  <property name="nextLevel" value=""/>
   <property name="paintGoalPercent" type="float" value="0.85"/>
  </properties>
  <tileset firstgid="1" source="default_tileset.tsx"/>
