@@ -7,7 +7,9 @@
 
 void DeathSystem::update(float timescale) {
     auto ecs = EntityRegistry::getInstance();
-    for(auto ent : _entities) {
+
+    auto entities = _entities;
+    for(auto ent : entities) {
         auto& health = ecs->getComponent<HealthComponent>(ent);
         if(health.points < 1) {
             auto& state = ecs->getComponent<StateComponent>(ent);
@@ -28,6 +30,7 @@ void DeathSystem::update(float timescale) {
                     ecs->destroyEntity(ent);
                     _entityTimers.erase(ent);
                     ++_deaths;
+                    break; // TEMP SOLUTION!!! in reality need to keep better track of iterator and move it back one spot when entity is deleted
                 }
             }
         }
