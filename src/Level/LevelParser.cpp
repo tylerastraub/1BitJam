@@ -1,5 +1,4 @@
 #include "LevelParser.h"
-#include "FileIO.h"
 #include "SpritesheetRegistry.h"
 #include "EntityRegistry.h"
 // Prefabs
@@ -39,6 +38,7 @@ Level LevelParser::parseLevelFromTmx(std::string filePath, SpritesheetID sprites
         }
 
         // Custom map properties
+        PowerupComponent powerups;
         for(auto prop : map.getProperties()) {
             if(prop.getName() == "nextLevel" && prop.getType() == tmx::Property::Type::String) {
                 level.setNextLevel("res/tiled/" + prop.getStringValue());
@@ -46,7 +46,20 @@ Level LevelParser::parseLevelFromTmx(std::string filePath, SpritesheetID sprites
             else if(prop.getName() == "paintGoalPercent" && prop.getType() == tmx::Property::Type::Float) {
                 level.setPaintGoalPercent(prop.getFloatValue());
             }
+            else if(prop.getName() == "speedMod" && prop.getType() == tmx::Property::Type::Float) {
+                powerups.speedModifier = prop.getFloatValue();
+            }
+            else if(prop.getName() == "rangeMod" && prop.getType() == tmx::Property::Type::Int) {
+                powerups.paintAttackRangeAddition = prop.getIntValue();
+            }
+            else if(prop.getName() == "paintAttackEnabled" && prop.getType() == tmx::Property::Type::Boolean) {
+                powerups.paintAttack = prop.getBoolValue();
+            }
+            else if(prop.getName() == "bonusMessage" && prop.getType() == tmx::Property::Type::String) {
+                level.setBonusMessage(prop.getStringValue());
+            }
         }
+        level.setBonusPowerup(powerups);
 
         // Map layers
         for(const auto& layer : layers) {
@@ -143,6 +156,14 @@ Level LevelParser::parseLevelFromTmx(std::string filePath, SpritesheetID sprites
                                     prefabValue
                                 );
                                 level.addPrefab(trigger);
+                            }
+                        }
+                        // ============================== TEXT ==============================
+                        else if(object.getName() == "text") {
+                            for(auto prop : object.getProperties()) {
+                                if(prop.getName() == "contents" && prop.getType() == tmx::Property::Type::String) {
+                                    level.addText(object.getPosition().x, object.getPosition().y, prop.getStringValue());
+                                }
                             }
                         }
                     }

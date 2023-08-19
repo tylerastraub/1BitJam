@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="15" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="264">
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="15" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="265">
  <properties>
-  <property name="nextLevel" value="level_end.tmx"/>
+  <property name="bonusMessage" value="Paint attack enabled! Press SPACE"/>
+  <property name="nextLevel" value="level2.tmx"/>
+  <property name="paintAttackEnabled" type="bool" value="true"/>
   <property name="paintGoalPercent" type="float" value="0.5"/>
  </properties>
  <tileset firstgid="1" source="default_tileset.tsx"/>
@@ -24,7 +26,7 @@
 33,10,10,34,33,10,10,10,10,10,10,34,1,1,1
 </data>
  </layer>
- <objectgroup id="2" name="collisionmap">
+ <objectgroup id="2" name="collisionmap" visible="0">
   <object id="1" type="wall" x="0" y="0" width="16" height="16"/>
   <object id="2" type="wall" x="16" y="0" width="16" height="16"/>
   <object id="3" type="wall" x="32" y="0" width="16" height="16"/>
@@ -249,12 +251,14 @@
   <object id="260" type="bonus" x="32" y="208" width="16" height="16"/>
   <object id="261" type="bonus" x="48" y="192" width="16" height="16"/>
   <object id="262" type="bonus" x="64" y="192" width="16" height="16"/>
+  <object id="264" type="ground" x="32" y="80" width="16" height="16">
+   <properties>
+    <property name="paintAttackEnabled" type="bool" value="true"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="3" name="objects">
   <object id="174" name="player" x="32" y="32">
-   <point/>
-  </object>
-  <object id="263" name="spreader" x="32" y="80">
    <point/>
   </object>
  </objectgroup>

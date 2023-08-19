@@ -2,7 +2,10 @@
 #define GAME_H
 
 #include "State.h"
-#include "GameState.h"
+#include "Audio.h"
+#include "Settings.h"
+
+#include <memory>
 
 class Game {
 public:

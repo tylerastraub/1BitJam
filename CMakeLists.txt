@@ -102,6 +102,7 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/src/Render/Text.cpp
     ${PROJECT_SOURCE_DIR}/src/Render/Effects/ScreenShake.cpp
     ${PROJECT_SOURCE_DIR}/src/States/GameState.cpp
+    ${PROJECT_SOURCE_DIR}/src/States/MainMenuState.cpp
     ${PROJECT_SOURCE_DIR}/src/States/State.cpp
     )
     

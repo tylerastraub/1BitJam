@@ -15,6 +15,7 @@
 #include "AnimationComponent.h"
 #include "PainterComponent.h"
 #include "PaintAttackComponent.h"
+#include "PowerupComponent.h"
 
 #include <cmath>
 
@@ -32,6 +33,7 @@ namespace {
             auto& paintAttack = ecs->getComponent<PaintAttackComponent>(owner);
             auto& state = ecs->getComponent<StateComponent>(owner);
             auto& physics = ecs->getComponent<PhysicsComponent>(owner);
+            auto powerup = ecs->getComponent<PowerupComponent>(owner);
             painter.requestsPaint = true;
             painter.paintPos.push_back({std::roundf(transform.position.x), std::roundf(transform.position.y)});
 
@@ -39,7 +41,8 @@ namespace {
                 input.allowedInputs = {};
             }
             else if(transform.position == transform.goalPosition && physics.velocity.x == 0.f && physics.velocity.y == 0.f) {
-                input.allowedInputs = {InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT, InputEvent::ACTION, InputEvent::LOCK};
+                input.allowedInputs = {InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT, InputEvent::LOCK};
+                if(powerup.paintAttack) input.allowedInputs.push_back(InputEvent::ACTION);
             }
             else {
                 input.allowedInputs = {InputEvent::UP, InputEvent::LEFT, InputEvent::DOWN, InputEvent::RIGHT};

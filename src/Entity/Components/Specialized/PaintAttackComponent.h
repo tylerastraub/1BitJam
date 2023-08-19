@@ -6,6 +6,7 @@ struct PaintAttackComponent {
     int msCantActAfterPaintAttack = 300;
     bool attacking = false;
     bool wasAttackingLastTick = false;
+    int range = 1;
 };
 
 #endif

@@ -3,6 +3,7 @@
 #include "SpritesheetRegistry.h"
 #include "EntityRegistry.h"
 #include "LevelParser.h"
+#include "FileIO.h"
 // Components
 #include "InputComponent.h"
 #include "RenderComponent.h"
@@ -16,25 +17,26 @@
 #include "PainterComponent.h"
 #include "NavigationComponent.h"
 #include "HealthComponent.h"
+#include "PowerupComponent.h"
+#include "PaintAttackComponent.h"
 // Prefabs
 #include "Player.h"
 #include "Smudge.h"
 #include "Scrubber.h"
 
 #include <chrono>
+#include <algorithm>
 
 std::mt19937 RandomGen::randEng{(unsigned int) std::chrono::system_clock::now().time_since_epoch().count()};
 
 /**
  * TODO:
- * - Figure out bonus tile purpose
+ * - Create struct that keeps track of player powerups, pass it from state to state
  * - Add more enemies/items
  *     - Teleporting enemy that shoots out black paint in AOE around it after teleport
  *         - Teleports on hit ?
  *     - Smudge spawner
- * - Add sounds, MUSIC???
- * - Add level select main menu
- * - Add tutorial level (level 0)
+ * - Add sounds
 */
 
 bool GameState::init() {
@@ -52,6 +54,30 @@ bool GameState::init() {
     _level.updatePaintTiles();
     initSystems();
     _level.spawnPrefabs();
+    _player = _level.getPlayerId();
+
+    // Player powerup init
+    PowerupComponent powerupComponent;
+    std::vector<std::string> powerups = FileIO::readFile("res/powerups.txt");
+    for(std::string line : powerups) {
+        if(line == "paintAttackEnabled") powerupComponent.paintAttack = true;
+        else if(line.find("speedMod") != std::string::npos) {
+            int d = line.find('=');
+            float mod = std::stof(line.substr(d + 1));
+            powerupComponent.speedModifier = mod;
+        }
+        else if(line.find("rangeMod") != std::string::npos) {
+            int d = line.find('=');
+            int mod = std::stoi(line.substr(d + 1));
+            powerupComponent.paintAttackRangeAddition = mod;
+        }
+    }
+    ecs->addComponent<PowerupComponent>(_player, powerupComponent);
+    auto& physics = ecs->getComponent<PhysicsComponent>(_player);
+    physics.moveSpeed.x += powerupComponent.speedModifier;
+    physics.moveSpeed.y += powerupComponent.speedModifier;
+    auto& paintAttack = ecs->getComponent<PaintAttackComponent>(_player);
+    paintAttack.range += powerupComponent.paintAttackRangeAddition;
 
     // Camera
     auto& pTransform = ecs->getComponent<TransformComponent>(_player);
@@ -96,6 +122,9 @@ void GameState::tick(float timescale) {
             }
         }
         if(!_dialogueBox.isEnabled()) {
+            auto file = FileIO::readFile("res/completedlevels.txt");
+            file.push_back(getLevelFilePath());
+            FileIO::writeFile("res/completedlevels.txt", file);
             GameState* nextState = new GameState();
             nextState->setLevelFilePath(_level.getNextLevel());
             setNextState(nextState);
@@ -143,7 +172,30 @@ void GameState::tick(float timescale) {
     }
     if(!_bonusGoalMet && bonusStatus.first == bonusStatus.second) {
         _bonusGoalMet = true;
-        addInfoString("All bonus tiles painted!");
+        auto levels = FileIO::readFile("res/completedlevels.txt");
+        bool getBonus = true;
+        for(auto line : levels) {
+            if(getLevelFilePath() == line) getBonus = false;
+        }
+        if(getBonus) {
+            if(_level.getBonusMessage().size() > 0) addInfoString(_level.getBonusMessage());
+            auto& powerup = ecs->getComponent<PowerupComponent>(_player);
+            auto file = FileIO::readFile("res/powerups.txt");
+            if(_level.getBonusPowerup().paintAttack) {
+                powerup.paintAttack = true;
+                file.push_back("paintAttackEnabled");
+            }
+            if(powerup.speedModifier > 0.f) file.push_back("speedMod=" + std::to_string(powerup.speedModifier));
+            if(powerup.paintAttackRangeAddition > 0) file.push_back("rangeMod=" + std::to_string(powerup.paintAttackRangeAddition));
+            powerup.speedModifier += powerup.speedModifier;
+            powerup.paintAttackRangeAddition += powerup.paintAttackRangeAddition;
+            auto& physics = ecs->getComponent<PhysicsComponent>(_player);
+            physics.moveSpeed.x += powerup.speedModifier;
+            physics.moveSpeed.y += powerup.speedModifier;
+            auto& paintAttack = ecs->getComponent<PaintAttackComponent>(_player);
+            paintAttack.range += powerup.paintAttackRangeAddition;
+            FileIO::writeFile("res/powerups.txt", file);
+        }
     }
     if(!_allTilesGoalMet && _paintPercent == 1.f) {
         _allTilesGoalMet = true;
@@ -163,7 +215,7 @@ void GameState::render() {
     SDL_SetRenderDrawColor(getRenderer(), 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(getRenderer());
 
-    _level.render((int) _renderOffset.x, (int) _renderOffset.y);
+    _level.render((int) _renderOffset.x, (int) _renderOffset.y, getText(TextSize::TINY));
 
     _renderSystem->render(getRenderer(), (int) _renderOffset.x, (int) _renderOffset.y);
 

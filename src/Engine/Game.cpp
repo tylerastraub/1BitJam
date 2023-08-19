@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "SpritesheetRegistry.h"
+#include "GameState.h"
+#include "MainMenuState.h"
 
 #include <chrono>
 #include <SDL_image.h>
@@ -79,7 +81,8 @@ bool Game::init() {
                     }
                     else {
                         // State initialization
-                        _currentState = new GameState();
+                        // _currentState = new GameState();
+                        _currentState = new MainMenuState();
                         _currentState->setGameSize(GAME_WIDTH, GAME_HEIGHT);
                         _currentState->setRenderer(_renderer);
                         for(auto it : _text) {
@@ -87,7 +90,7 @@ bool Game::init() {
                         }
                         _currentState->setAudioPlayer(_audioPlayer.get());
                         _currentState->setSettings(_settings.get());
-                        _currentState->setLevelFilePath("res/tiled/level1.tmx");
+                        // _currentState->setLevelFilePath("res/tiled/level1.tmx");
                         _currentState->init();
                         SDL_ShowCursor(SDL_DISABLE);
                         windowCreatedSuccessfully = true;

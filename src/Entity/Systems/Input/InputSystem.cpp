@@ -91,22 +91,24 @@ void InputSystem::update() {
                 paintAttack.msSinceLastPaintAttack = 0;
                 paintAttack.attacking = true;
                 strb::vec2 offset = {0.f, 0.f};
-                switch(dir.direction) {
-                    case Direction::NORTH:
-                        offset.y -= 1;
-                        break;
-                    case Direction::SOUTH:
-                        offset.y += 1;
-                        break;
-                    case Direction::WEST:
-                        offset.x -= 1;
-                        break;
-                    case Direction::EAST:
-                        offset.x += 1;
-                        break;
-                }
                 auto& painter = ecs->getComponent<PainterComponent>(ent);
-                painter.paintPos.push_back(transform.position + offset);
+                for(int i = 0; i < paintAttack.range; ++i) {
+                    switch(dir.direction) {
+                        case Direction::NORTH:
+                            offset.y -= 1;
+                            break;
+                        case Direction::SOUTH:
+                            offset.y += 1;
+                            break;
+                        case Direction::WEST:
+                            offset.x -= 1;
+                            break;
+                        case Direction::EAST:
+                            offset.x += 1;
+                            break;
+                    }
+                    painter.paintPos.push_back(transform.position + offset);
+                }
                 painter.requestsPaint = true;
                 _audioPlayer->playAudio(ent, AudioSound::PAINT_ATTACK, 0.5f);
             }

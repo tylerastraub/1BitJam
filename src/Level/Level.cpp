@@ -26,7 +26,7 @@ void Level::spawnPrefabs() {
     }
 }
 
-void Level::render(int xOffset, int yOffset) {
+void Level::render(int xOffset, int yOffset, Text* text) {
     auto playerPos = EntityRegistry::getInstance()->getComponent<TransformComponent>(_playerId).position;
     if(_tileset == nullptr) return;
     for(int x = 0; x < _tilemapWidth; ++x) {
@@ -46,6 +46,17 @@ void Level::render(int xOffset, int yOffset) {
             _tileset->setIsAnimated(false);
 
             _tileset->render(x * _tileSize + xOffset, y * _tileSize + yOffset, t.spritesheetRect.w, t.spritesheetRect.h);
+        }
+    }
+
+    if(!_isLevelComplete) {
+        for(auto levelText : _levelText) {
+            text->setString(levelText.text);
+            if(levelText.pos.x + text->getWidth() + xOffset < 0 || levelText.pos.x + xOffset > _tilemapWidth * _tileSize ||
+            levelText.pos.y + text->getHeight() + yOffset < 0 || levelText.pos.y + yOffset > _tilemapHeight * _tileSize) {
+                continue;
+            }
+            text->render(levelText.pos.x + xOffset, levelText.pos.y + yOffset);
         }
     }
 }
@@ -135,6 +146,10 @@ void Level::addPrefab(Entity entity) {
     _prefabs.push_back(entity);
 }
 
+void Level::addText(int x, int y, std::string text) {
+    _levelText.push_back(LevelText{strb::vec2{(float) x, (float) y}, text});
+}
+
 void Level::setPaintGoalPercent(float paintGoalPercent) {
     _paintGoalPercent = paintGoalPercent;
 }
@@ -145,6 +160,14 @@ void Level::setNextLevel(std::string nextLevel) {
 
 void Level::setIsLevelComplete(bool isLevelComplete) {
     _isLevelComplete = isLevelComplete;
+}
+
+void Level::setBonusPowerup(PowerupComponent bonusPowerup) {
+    _bonusPowerup = bonusPowerup;
+}
+
+void Level::setBonusMessage(std::string bonusMessage) {
+    _bonusMessage = bonusMessage;
 }
 
 Tile Level::getTileAt(int x, int y) {
@@ -219,4 +242,12 @@ bool Level::isPaintGoalMet() {
 
 bool Level::isLevelComplete() {
     return _isLevelComplete;
+}
+
+PowerupComponent Level::getBonusPowerup() {
+    return _bonusPowerup;
+}
+
+std::string Level::getBonusMessage() {
+    return _bonusMessage;
 }
