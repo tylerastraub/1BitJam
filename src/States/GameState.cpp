@@ -137,10 +137,28 @@ void GameState::tick(float timescale) {
     std::pair<int, int> paintStatus = _level.getPaintedTileStatus();
     if(paintStatus.second != 0) _paintPercent = static_cast<float>(paintStatus.first) / static_cast<float>(paintStatus.second);
     std::pair<int, int> bonusStatus = _level.getBonusTileStatus();
-    // std::cout << "Painted tiles: " << paintStatus.first << "/" << paintStatus.second << " - Bonus tiles: " << bonusStatus.first << "/" << bonusStatus.second << std::endl;
+
+    // Info display text
+    if(!_tileGoalMet && _paintPercent > _level.getPaintGoalPercent()) {
+        _tileGoalMet = true;
+        addInfoString("Paint goal hit!");
+    }
+    if(!_bonusGoalMet && bonusStatus.first == bonusStatus.second) {
+        _bonusGoalMet = true;
+        addInfoString("All bonus tiles painted!");
+    }
+    if(!_allTilesGoalMet && _paintPercent == 1.f) {
+        _allTilesGoalMet = true;
+        addInfoString("100% paint goal reached!");
+    }
+    if(_infoStrings.size() > 0 && _currentInfoDisplayTimer > 3000) {
+        _infoStrings.erase(_infoStrings.begin());
+        _currentInfoDisplayTimer = 0;
+    }
 
     // Timer
     _timer.update(timescale);
+    _currentInfoDisplayTimer += timescale * 1000.f;
 }
 
 void GameState::render() {
@@ -171,6 +189,22 @@ void GameState::render() {
     // Dialogue box
     if(_dialogueBox.isEnabled()) {
         _dialogueBox.render(getGameSize().x / 2 - 50, 5);
+    }
+
+    // Info display text
+    if(_infoStrings.size() > 0) {
+        Text* tinyText = getText(TextSize::TINY);
+        tinyText->setPercentOfTextDisplayed(1.f);
+        tinyText->setString(*_infoStrings.begin());
+        SDL_SetRenderDrawColor(getRenderer(), 0x00, 0x00, 0x00, 0xFF);
+        SDL_Rect backdrop = {
+            (int) (getGameSize().x / 2 - tinyText->getWidth() / 2),
+            (int) (getGameSize().y - tinyText->getHeight()),
+            tinyText->getWidth(),
+            tinyText->getHeight()
+        };
+        SDL_RenderFillRect(getRenderer(), &backdrop);
+        tinyText->render(getGameSize().x / 2 - tinyText->getWidth() / 2, getGameSize().y - tinyText->getHeight());
     }
 
     SDL_RenderPresent(getRenderer());
@@ -278,4 +312,9 @@ void GameState::initPrefabs() {
         {1, 10},
     };
     prefab::Scrubber::create(1, 1, path);
+}
+
+void GameState::addInfoString(std::string info) {
+    if(_infoStrings.empty()) _currentInfoDisplayTimer = 0;
+    _infoStrings.push_back(info);
 }

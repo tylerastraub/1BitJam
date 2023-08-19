@@ -141,7 +141,10 @@ void Text::setString(std::string s) {
         }
     }
     if(currentWord.w > _width) _width = currentWord.w;
-    if(!currentWord.text.empty()) _words.push_back(currentWord); // add that last word
+    if(!currentWord.text.empty()) {
+        _words.push_back(currentWord); // add that last word
+        _width += currentWord.w;
+    }
 }
 
 void Text::setPercentOfTextDisplayed(float percent) {

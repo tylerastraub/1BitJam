@@ -39,6 +39,8 @@ private:
     void initSystems();
     void initPrefabs();
 
+    void addInfoString(std::string info);
+
     std::unique_ptr<Keyboard> _keyboard = nullptr;
     std::unique_ptr<Mouse> _mouse = nullptr;
     std::unique_ptr<Controller> _controller = nullptr;
@@ -64,6 +66,13 @@ private:
 
     Timer _timer;
     float _paintPercent = 0.f; // percent from 0-1
+
+    int _infoDisplayTime = 3000;
+    int _currentInfoDisplayTimer = 0;
+    std::vector<std::string> _infoStrings = {};
+    bool _tileGoalMet = false;
+    bool _bonusGoalMet = false;
+    bool _allTilesGoalMet = false;
 };
 
 #endif
